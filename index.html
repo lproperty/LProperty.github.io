@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Logistics Dashboard</title>
+  <link rel="stylesheet" href="./static/lib/css//bootstrap.min.css">
+  <link rel="stylesheet" href="./static/lib/css/keen-dashboards.css">
+  <link rel="stylesheet" href="./static/lib/css/dc.css">
+  <link rel="stylesheet" href="./static/css/custom.css">
+
+
+</head>
+<body class="application">
+
+  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    </div>
+  </div>
+
+  <!-- Criteria selection stage -->
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="chart-wrapper">
+            <div class="chart-notes">
+              Criteria Selection
+            </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Transport Scope
+          </div>
+          <div class="chart-stage">
+            <div id="transportScope">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:transportScopeChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <!-- <div class="chart-notes">
+            Primary Inbound, Primary Outbound, Secondary Outbound, Other
+          </div> -->
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+              Mode of Transport
+          </div>
+          <div class="chart-stage">
+            <div id="mot">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:motChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <!-- <div class="chart-notes">
+            Notes about this chart
+          </div> -->
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Temperature Condition
+          </div>
+          <div class="chart-stage">
+            <div id="tempCondition">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:tempConditionChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <!-- <div class="chart-notes">
+            Notes about this chart
+          </div> -->
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Quarter Profile
+          </div>
+          <div class="chart-stage">
+            <div id="quarterProfile">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:quarterChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!-- Criteria selection stage -->
+
+<div class="col-md-3">
+  <div class="chart-wrapper">
+    <div class="chart-title">
+      Day-of-Week Profile
+    </div>
+    <div class="chart-stage">
+      <div id="dayOfWeekProfile">
+        <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+        <a class="reset" href="javascript:dayOfWeekChart.filterAll();dc.redrawAll();"
+           style="display: none;">reset</a>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+    <!-- <div class="chart-notes">
+      Notes about this chart
+    </div> -->
+  </div>
+</div>
+
+<div class="col-md-6">
+  <div class="chart-wrapper">
+    <div class="chart-title">
+      Number of shipments
+    </div>
+    <div class="chart-stage">
+      <div id="timeChart">
+        <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+        <a class="reset" href="javascript:timeChart.filterAll();dc.redrawAll();"
+           style="display: none;">reset</a>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+    <!-- <div class="chart-notes">
+      Notes about this chart
+    </div> -->
+  </div>
+</div>
+
+<!-- Table -->
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="chart-wrapper">
+        <div class="chart-title">
+          Data Table
+        </div>
+        <div class="chart-stage">
+          <div class="dc-data-count">
+              <span class="filter-count"></span> selected out of <span class="total-count"></span> records | <a
+                  href="javascript:dc.filterAll(); dc.renderAll();">Reset All</a>
+          </div>
+          <table class="table table-hover dc-data-table">
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Table -->
+
+<div class="container-fluid">
+  <p class="small text-muted">NUS | Industrial and Systems Engineering</p>
+</div>
+
+<script src="./static/lib/js/jquery.min.js"></script>
+<script src="./static/lib/js/bootstrap.min.js"></script>
+<script src="./static/lib/js/crossfilter.js"></script>
+<script src="./static/lib/js/d3.js"></script>
+<script src="./static/lib/js/dc.js"></script>
+<script src="./static/lib/js/queue.js"></script>
+<script src="./static/lib/js/keen.min.js"></script>
+
+<script src="./static/js/main.js"></script>
+
+</body>
+</html>
