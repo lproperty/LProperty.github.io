@@ -4,25 +4,45 @@
   <meta charset="UTF-8">
   <title>Logistics Dashboard</title>
   <link rel="stylesheet" href="./static/lib/css//bootstrap.min.css">
-  <link rel="stylesheet" href="./static/lib/css/keen-dashboards.css">
   <link rel="stylesheet" href="./static/lib/css/dc.css">
   <link rel="stylesheet" href="./static/css/custom.css">
 
 
 </head>
-<body class="application">
+<body class="application" data-offset="50" data-spy="scroll" data-target="#navBar"">
 
-  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="./">DASHBOARD</a>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">DASHBOARD</a>
+    </div>
+    <div>
+      <div class="collapse navbar-collapse" id="navBar">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#section1">Criteria Selection</a></li>
+          <li><a href="#section2">Charts & Graphs</a></li>
+          <li><a href="#section3">Cost Savings</a></li>
+          <!-- <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Section 4 <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#section41">Section 4-1</a></li>
+              <li><a href="#section42">Section 4-2</a></li>
+            </ul>
+          </li> -->
+        </ul>
       </div>
     </div>
   </div>
+</nav>
+
 
   <!-- Criteria selection stage -->
 
-  <div class="container-fluid">
+  <div class="container-fluid" id="section1">
     <div class="row">
       <div class="col-md-12">
         <div class="chart-wrapper">
@@ -101,6 +121,7 @@
         </div>
       </div>
     </div>
+  </div>
 
 <!-- Criteria selection stage -->
 
@@ -144,7 +165,7 @@
 
 <!-- Table -->
 
-<div class="container-fluid">
+<div class="container-fluid" id="section3">
   <div class="row">
     <div class="col-md-12">
       <div class="chart-wrapper">
