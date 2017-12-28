@@ -1,3 +1,4 @@
+  // Section 1 charts
   var motChart = dc.pieChart("#mot");
   var tempConditionChart = dc.pieChart("#tempCondition");
   var transportScopeChart = dc.pieChart("#transportScope");
@@ -6,7 +7,8 @@
   var dayOfWeekChart = dc.rowChart('#dayOfWeekProfile');
   var quarterChart = dc.pieChart('#quarterProfile');
   var timeChart = dc.barChart("#timeChart");
-
+  // Section 2 charts
+  var boxDayChart = dc.boxPlot("#boxDayChart");
 
 
   d3.csv("opendata.csv", function (error, data) {
@@ -47,7 +49,15 @@
         }
     });
 
+    var boxDayDim = ndx.dimension(function (d) {
+        var day = d["Check in Date"].getDay();
+        var name = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        return day + '.' + name[day];
+    });
 //Metrics
+    var minDate = checkInDateDim.bottom(1)[0]["Check in Date"];
+    var maxDate = checkInDateDim.top(1)[0]["Check in Date"];
+
     var tempConditionGroup = tempConditionDim.group();
     var motGroup = motDim.group();
     var transportScopeGroup = transportScopeDim.group();
@@ -55,8 +65,19 @@
     var quarterGroup = quarterDim.group();
     var checkInDateGroup = checkInDateDim.group();
 
-    var minDate = checkInDateDim.bottom(1)[0]["Check in Date"];
-    var maxDate = checkInDateDim.top(1)[0]["Check in Date"];
+    var boxDayGroup = boxDayDim.group().reduce(
+      function(p,v) {
+        p.push(v.Volume);
+        return p;
+      },
+      function(p,v) {
+        p.splice(p.indexOf(v.Volume), 1);
+        return p;
+      },
+      function() {
+        return [];
+      }
+    );
 
 //Charts
     transportScopeChart
@@ -163,6 +184,15 @@
         .elasticY(true)
         .xAxisLabel("Month")
         .yAxis().ticks(4);
+
+      boxDayChart
+        .width(800)
+        .height(500)
+        .margins({top: 10, right: 50, bottom: 30, left: 50})
+        .dimension(boxDayDim)
+        .group(boxDayGroup)
+        .elasticY(true)
+        .elasticX(true);
 
 //Table
     visCount

@@ -11,7 +11,7 @@
 </head>
 <body class="application" data-offset="100" data-spy="scroll" data-target="#navBar"">
 
-  <nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -27,6 +27,7 @@
           <li class="active"><a href="#section1">Criteria Selection</a></li>
           <li><a href="#section2">Charts & Graphs</a></li>
           <li><a href="#section3">Cost Savings</a></li>
+          <li><a href="#section4">Data Table</a></li>
           <!-- <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Section 4 <span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li><a href="#section41">Section 4-1</a></li>
@@ -37,20 +38,18 @@
       </div>
     </div>
   </div>
-</nav>
+</div>
 
 
-  <!-- Criteria selection stage -->
-
-  <div class="container-fluid" id="section1">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="chart-wrapper">
-            <div class="chart-notes">
-              Criteria Selection
-            </div>
-        </div>
+<div class="container-fluid" id="section1">
+    <div class="col-md-12">
+      <div class="chart-wrapper">
+          <div class="chart-notes">
+            Criteria Selection
+          </div>
       </div>
+    </div>
+    <div class="row">
       <div class="col-md-3">
         <div class="chart-wrapper">
           <div class="chart-title">
@@ -121,51 +120,91 @@
         </div>
       </div>
     </div>
-  </div>
-
-<!-- Criteria selection stage -->
-
-<div class="col-md-3">
-  <div class="chart-wrapper">
-    <div class="chart-title">
-      Day-of-Week Profile
-    </div>
-    <div class="chart-stage">
-      <div id="dayOfWeekProfile">
-        <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
-        <a class="reset" href="javascript:dayOfWeekChart.filterAll();dc.redrawAll();"
-           style="display: none;">reset</a>
-        <div class="clearfix"></div>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Day-of-Week Profile
+          </div>
+          <div class="chart-stage">
+            <div id="dayOfWeekProfile">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:dayOfWeekChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <!-- <div class="chart-notes">
+            Notes about this chart
+          </div> -->
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Number of shipments
+          </div>
+          <div class="chart-stage">
+            <div id="timeChart">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:timeChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="chart-notes">
+            Drag to select time duration
+          </div>
+        </div>
       </div>
     </div>
-    <!-- <div class="chart-notes">
-      Notes about this chart
-    </div> -->
+</div>
+
+<div class="container-fluid" id="section2">
+  <div class="col-md-12">
+    <div class="chart-wrapper">
+        <div class="chart-notes">
+          Charts & Graphs
+
+
+        </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="chart-wrapper">
+        <div class="chart-title">
+          Day-of-Week Profile
+        </div>
+        <div class="chart-stage">
+          <div id="boxDayChart">
+            <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+            <a class="reset" href="javascript:boxDayChart.filterAll();dc.redrawAll();"
+               style="display: none;">reset</a>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
-<div class="col-md-6">
-  <div class="chart-wrapper">
-    <div class="chart-title">
-      Number of shipments
-    </div>
-    <div class="chart-stage">
-      <div id="timeChart">
-        <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
-        <a class="reset" href="javascript:timeChart.filterAll();dc.redrawAll();"
-           style="display: none;">reset</a>
-        <div class="clearfix"></div>
-      </div>
-    </div>
-    <div class="chart-notes">
-      Drag to select time duration
+<div class="container-fluid" id="section3">
+  <div class="col-md-12">
+    <div class="chart-wrapper">
+        <div class="chart-notes">
+          Cost Savings
+        </div>
     </div>
   </div>
+
 </div>
+
 
 <!-- Table -->
 
-<div class="container-fluid">
+<div class="container-fluid" id="section4">
   <div class="row">
     <div class="col-md-12">
       <div class="chart-wrapper">
