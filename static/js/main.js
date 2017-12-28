@@ -18,6 +18,7 @@
     var dateFormat = d3.time.format('%m/%d/%Y');
     var numberFormat = d3.format('.2f');
     data.forEach(function(d) {
+      d.Vol = +d.Vol;
       d["Check in Date"] = dateFormat.parse(d["Check in Date"]);
       d["Check in Date"].setFullYear(2000 + d["Check in Date"].getFullYear());
     });
@@ -67,11 +68,11 @@
 
     var boxDayGroup = boxDayDim.group().reduce(
       function(p,v) {
-        p.push(v.Volume);
+        p.push(v.Vol);
         return p;
       },
       function(p,v) {
-        p.splice(p.indexOf(v.Volume), 1);
+        p.splice(p.indexOf(v.Vol), 1);
         return p;
       },
       function() {
@@ -186,13 +187,15 @@
         .yAxis().ticks(4);
 
       boxDayChart
-        .width(800)
-        .height(500)
+        .width(650)
+        .height(300)
         .margins({top: 10, right: 50, bottom: 30, left: 50})
         .dimension(boxDayDim)
         .group(boxDayGroup)
+        .label(function (d) {
+            return d.key.split('.')[1];
+        })
         .elasticY(true)
-        .elasticX(true);
 
 //Table
     visCount
