@@ -189,13 +189,14 @@
       boxDayChart
         .width(650)
         .height(300)
-        .margins({top: 10, right: 50, bottom: 30, left: 50})
+        .margins({top: 10, right: 50, bottom: 30, left: 30})
         .dimension(boxDayDim)
         .group(boxDayGroup)
-        .label(function (d) {
-            return d.key.split('.')[1];
-        })
+        .tickFormat(d3.format(".1f"))
+        .yAxisLabel("Shipment Volume (m³)")
         .elasticY(true)
+        // In case that it's desirable to disable filter function.
+        // .filter = function() {};
 
 //Table
     visCount
