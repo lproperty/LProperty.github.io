@@ -9,6 +9,7 @@
   var timeChart = dc.barChart("#timeChart");
   // Section 2 charts
   var boxDayChart = dc.boxPlot("#boxDayChart");
+  var boxMonthChart = dc.boxPlot("#boxMonthChart")
 
 
   d3.csv("opendata.csv", function (error, data) {
@@ -49,12 +50,17 @@
             return 'Q4';
         }
     });
-
     var boxDayDim = ndx.dimension(function (d) {
         var day = d["Check in Date"].getDay();
         var name = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         return day + '.' + name[day];
     });
+    var boxMonthDim = ndx.dimension(function (d) {
+        var month = d["Check in Date"].getMonth();
+        var name = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        return (month+1) + '.' + name[month];
+    });
+
 //Metrics
     var minDate = checkInDateDim.bottom(1)[0]["Check in Date"];
     var maxDate = checkInDateDim.top(1)[0]["Check in Date"];
@@ -65,8 +71,20 @@
     var dayOfWeekGroup = dayOfWeekDim.group();
     var quarterGroup = quarterDim.group();
     var checkInDateGroup = checkInDateDim.group();
-
     var boxDayGroup = boxDayDim.group().reduce(
+      function(p,v) {
+        p.push(v.Vol);
+        return p;
+      },
+      function(p,v) {
+        p.splice(p.indexOf(v.Vol), 1);
+        return p;
+      },
+      function() {
+        return [];
+      }
+    );
+    var boxMonthGroup = boxMonthDim.group().reduce(
       function(p,v) {
         p.push(v.Vol);
         return p;
@@ -177,7 +195,7 @@
       timeChart
         .width(600)
         .height(160)
-        .margins({top: 10, right: 50, bottom: 30, left: 50})
+        .margins({top: 10, right: 50, bottom: 40, left: 50})
         .dimension(checkInDateDim)
         .group(checkInDateGroup)
         .transitionDuration(500)
@@ -194,9 +212,20 @@
         .group(boxDayGroup)
         .tickFormat(d3.format(".1f"))
         .yAxisLabel("Shipment Volume (m³)")
-        .elasticY(true)
+        .elasticY(true);
         // In case that it's desirable to disable filter function.
-        // .filter = function() {};
+        //filter = function() {};
+
+        boxMonthChart
+          .width(650)
+          .height(300)
+          .margins({top: 10, right: 50, bottom: 30, left: 30})
+          .dimension(boxMonthDim)
+          .group(boxMonthGroup)
+          .tickFormat(d3.format(".1f"))
+          .yAxisLabel("Shipment Volume (m³)")
+          .elasticY(true)
+          .elasticX(true);
 
 //Table
     visCount
