@@ -86,3 +86,8 @@
    padding: 8px 10px 5px;
    text-align: center;
  }
+
+.scroll-adjust{
+padding-top: 60px;
+margin-top: -60px;
+}

@@ -201,11 +201,10 @@
         .transitionDuration(500)
         .x(d3.time.scale().domain([minDate, maxDate]))
         .elasticY(true)
-        .xAxisLabel("Month")
         .yAxis().ticks(4);
 
       boxDayChart
-        .width(650)
+        .width(450)
         .height(300)
         .margins({top: 10, right: 50, bottom: 30, left: 30})
         .dimension(boxDayDim)
@@ -217,7 +216,7 @@
         //filter = function() {};
 
         boxMonthChart
-          .width(650)
+          .width(850)
           .height(300)
           .margins({top: 10, right: 50, bottom: 30, left: 30})
           .dimension(boxMonthDim)
