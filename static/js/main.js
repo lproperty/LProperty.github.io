@@ -7,6 +7,8 @@
   var dayOfWeekChart = dc.rowChart('#dayOfWeekProfile');
   var quarterChart = dc.pieChart('#quarterProfile');
   var timeChart = dc.barChart("#timeChart");
+  var monthOfYearChart = dc.rowChart('#monthOfYearChart');
+
   // Section 2 charts
   var boxDayVolumeChart = dc.boxPlot("#boxDayVolumeChart");
   var boxMonthVolumeChart = dc.boxPlot("#boxMonthVolumeChart");
@@ -41,6 +43,11 @@
         var name = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         return day + '.' + name[day];
     });
+    var monthOfYearDim = ndx.dimension(function (d) {
+        var month = d["Check in Date"].getMonth();
+        var name = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        return (month+1) + '.' + name[month];
+    });
     var quarterDim = ndx.dimension(function (d) {
         var month = d["Check in Date"].getMonth();
         if (month <= 2) {
@@ -72,6 +79,7 @@
     var motGroup = motDim.group();
     var transportScopeGroup = transportScopeDim.group();
     var dayOfWeekGroup = dayOfWeekDim.group();
+    var monthOfYearGroup = monthOfYearDim.group();
     var quarterGroup = quarterDim.group();
     var checkInDateGroup = checkInDateDim.group();
     var boxDayVolumeGroup = boxDayDim.group().reduce(
@@ -193,6 +201,24 @@
         .dimension(dayOfWeekDim)
         // Assign colors to each value in the x scale domain
         .ordinalColors(['#3182bd', '#3097bd', '#6baed6', '#7cbce2', '#9ecae1', '#c6dbef', '#dadaeb'])
+        .label(function (d) {
+            return d.key.split('.')[1];
+        })
+        // Title sets the row text
+        .title(function (d) {
+            return d.value;
+        })
+        .elasticX(true)
+        .xAxis().ticks(7);
+
+      monthOfYearChart
+        .width(280)
+        .height(160)
+        .margins({top: 20, left: 10, right: 10, bottom: 20})
+        .group(monthOfYearGroup)
+        .dimension(monthOfYearDim)
+        // Assign colors to each value in the x scale domain
+        // .ordinalColors(['#3182bd', '#3097bd', '#6baed6', '#7cbce2', '#9ecae1', '#c6dbef', '#dadaeb'])
         .label(function (d) {
             return d.key.split('.')[1];
         })
