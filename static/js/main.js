@@ -8,10 +8,12 @@
   var quarterChart = dc.pieChart('#quarterProfile');
   var timeChart = dc.barChart("#timeChart");
   // Section 2 charts
-  var boxDayChart = dc.boxPlot("#boxDayChart");
-  var boxMonthChart = dc.boxPlot("#boxMonthChart")
+  var boxDayVolumeChart = dc.boxPlot("#boxDayVolumeChart");
+  var boxMonthVolumeChart = dc.boxPlot("#boxMonthVolumeChart");
+  var boxDayWeightChart = dc.boxPlot("#boxDayWeightChart");
+  var boxMonthWeightChart = dc.boxPlot("#boxMonthWeightChart");
 
-
+//Data input
   d3.csv("opendata.csv", function (error, data) {
     if (error) throw error;
 
@@ -20,6 +22,7 @@
     var numberFormat = d3.format('.2f');
     data.forEach(function(d) {
       d.Vol = +d.Vol;
+      d.Weight = +d.Weight;
       d["Check in Date"] = dateFormat.parse(d["Check in Date"]);
       d["Check in Date"].setFullYear(2000 + d["Check in Date"].getFullYear());
     });
@@ -71,7 +74,7 @@
     var dayOfWeekGroup = dayOfWeekDim.group();
     var quarterGroup = quarterDim.group();
     var checkInDateGroup = checkInDateDim.group();
-    var boxDayGroup = boxDayDim.group().reduce(
+    var boxDayVolumeGroup = boxDayDim.group().reduce(
       function(p,v) {
         p.push(v.Vol);
         return p;
@@ -84,13 +87,39 @@
         return [];
       }
     );
-    var boxMonthGroup = boxMonthDim.group().reduce(
+    var boxMonthVolumeGroup = boxMonthDim.group().reduce(
       function(p,v) {
         p.push(v.Vol);
         return p;
       },
       function(p,v) {
         p.splice(p.indexOf(v.Vol), 1);
+        return p;
+      },
+      function() {
+        return [];
+      }
+    );
+    var boxDayWeightGroup = boxDayDim.group().reduce(
+      function(p,v) {
+        p.push(v.Weight);
+        return p;
+      },
+      function(p,v) {
+        p.splice(p.indexOf(v.Weight), 1);
+        return p;
+      },
+      function() {
+        return [];
+      }
+    );
+    var boxMonthWeightGroup = boxMonthDim.group().reduce(
+      function(p,v) {
+        p.push(v.Weight);
+        return p;
+      },
+      function(p,v) {
+        p.splice(p.indexOf(v.Weight), 1);
         return p;
       },
       function() {
@@ -203,26 +232,47 @@
         .elasticY(true)
         .yAxis().ticks(4);
 
-      boxDayChart
+      boxDayVolumeChart
         .width(450)
         .height(300)
         .margins({top: 10, right: 50, bottom: 30, left: 30})
         .dimension(boxDayDim)
-        .group(boxDayGroup)
+        .group(boxDayVolumeGroup)
         .tickFormat(d3.format(".1f"))
         .yAxisLabel("Shipment Volume (m³)")
         .elasticY(true);
         // In case that it's desirable to disable filter function.
         //filter = function() {};
 
-        boxMonthChart
+        boxMonthVolumeChart
           .width(850)
           .height(300)
           .margins({top: 10, right: 50, bottom: 30, left: 30})
           .dimension(boxMonthDim)
-          .group(boxMonthGroup)
+          .group(boxMonthVolumeGroup)
           .tickFormat(d3.format(".1f"))
           .yAxisLabel("Shipment Volume (m³)")
+          .elasticY(true)
+          .elasticX(true);
+
+        boxDayWeightChart
+          .width(450)
+          .height(300)
+          .margins({top: 10, right: 50, bottom: 30, left: 30})
+          .dimension(boxDayDim)
+          .group(boxDayWeightGroup)
+          .tickFormat(d3.format(".1f"))
+          .yAxisLabel("Shipment Weight (t)")
+          .elasticY(true);
+
+        boxMonthWeightChart
+          .width(850)
+          .height(300)
+          .margins({top: 10, right: 50, bottom: 30, left: 30})
+          .dimension(boxMonthDim)
+          .group(boxMonthWeightGroup)
+          .tickFormat(d3.format(".1f"))
+          .yAxisLabel("Shipment Weight (t)")
           .elasticY(true)
           .elasticX(true);
 
