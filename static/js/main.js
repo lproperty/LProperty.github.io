@@ -195,7 +195,7 @@
 
       dayOfWeekChart
         .width(280)
-        .height(160)
+        .height(200)
         .margins({top: 20, left: 10, right: 10, bottom: 20})
         .group(dayOfWeekGroup)
         .dimension(dayOfWeekDim)
@@ -213,7 +213,7 @@
 
       monthOfYearChart
         .width(280)
-        .height(160)
+        .height(200)
         .margins({top: 20, left: 10, right: 10, bottom: 20})
         .group(monthOfYearGroup)
         .dimension(monthOfYearDim)
@@ -248,9 +248,9 @@
           });
 
       timeChart
-        .width(600)
-        .height(160)
-        .margins({top: 10, right: 50, bottom: 40, left: 50})
+        .width(650)
+        .height(200)
+        .margins({top: 10, right: 50, bottom: 20, left: 50})
         .dimension(checkInDateDim)
         .group(checkInDateGroup)
         .transitionDuration(500)
