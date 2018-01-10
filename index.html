@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="./static/css/custom.css">
 
 </head>
-<body class="application" data-spy="scroll" data-target="#navBar" data-offset="60">
+<body class="application">
 
   <div class="se-pre-con"></div>
 
@@ -22,35 +22,23 @@
       </button>
       <a class="navbar-brand" href="">DASHBOARD</a>
     </div>
-    <div>
-      <div class="collapse navbar-collapse" id="navBar">
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="#section1">Criteria Selection</a></li>
-          <li><a href="#section2">Charts & Graphs</a></li>
-          <li><a href="#section3">Cost Savings</a></li>
-          <li><a href="#section4">Data Table</a></li>
-          <!-- <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Section 4 <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="#section41">Section 4-1</a></li>
-              <li><a href="#section42">Section 4-2</a></li>
-            </ul>
-          </li> -->
-        </ul>
-      </div>
-    </div>
   </div>
-</div>
+  </div>
 
+  <!-- Nav tabs -->
+<ul class="nav nav-pills" role="tablist">
+  <li class="active"><a href="#section1" role="tab" data-toggle="tab">Criteria Selection</a></li>
+  <li><a href="#section2" role="tab" data-toggle="tab">Charts & Graphs</a></li>
+  <li><a href="#section3" role="tab" data-toggle="tab">Cost Savings</a></li>
+  <li><a href="#section4" role="tab" data-toggle="tab">Data Table</a></li>
+</ul>
 
-<div class="scroll-adjust" id="section1"></div>
+<!-- Tab panes -->
+<div class="tab-content">
+
+<div class="tab-pane fade in active" id="section1">
 <div class="container-fluid">
-    <div class="col-md-12">
-      <div class="chart-wrapper">
-          <div class="chart-notes">
-            Criteria Selection
-          </div>
-      </div>
-    </div>
+  <div class="filler"></div>
     <div class="row">
       <div class="col-md-3">
         <div class="chart-wrapper">
@@ -181,16 +169,10 @@
       </div>
     </div>
 </div>
-
-<div class="scroll-adjust" id="section2"></div>
+</div>
+<div class="tab-pane fade" id="section2">
 <div class="container-fluid">
-  <div class="col-md-12">
-    <div class="chart-wrapper">
-        <div class="chart-notes">
-          Charts & Graphs
-        </div>
-    </div>
-  </div>
+  <div class="filler"></div>
 <!-- 1st row -->
 <!-- <div class="row">
   <div class="col-md-4">
@@ -290,25 +272,19 @@
       </div>
   </div>
   </div>
-
 </div>
 
-<div class="scroll-adjust" id="section3"></div>
+<div class="tab-pane fade" id="section3">
 <div class="container-fluid">
-  <div class="col-md-12">
-    <div class="chart-wrapper">
-        <div class="chart-notes">
-          Cost Savings
-        </div>
-    </div>
-  </div>
-
+  <div class="filler"></div>
+<!-- EDIT HERE -->
 </div>
-
+</div>
 
 <!-- Table -->
-<div class="scroll-adjust" id="section4"></div>
+<div class="tab-pane fade" id="section4">
 <div class="container-fluid">
+  <div class="filler"></div>
   <div class="row">
     <div class="col-md-12">
       <div class="chart-wrapper">
@@ -326,8 +302,10 @@
       </div>
     </div>
   </div>
-
+</div>
+</div>
 <!-- Table -->
+</div>
 
 <div class="container-fluid">
   <p class="small text-muted">NUS | Industrial and Systems Engineering</p>
