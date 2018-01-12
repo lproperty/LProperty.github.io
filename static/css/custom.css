@@ -46,6 +46,7 @@
  .navbar a.navbar-brand {
    color: #d7d7d7;
    text-decoration: none;
+   margin-left: 3px !important;
  }
  .navbar-inverse .navbar-nav>.active>a,
  .navbar-inverse .navbar-nav>.active>a:hover,
@@ -93,5 +94,5 @@ margin-top: -60px;
 }
 
 .filler{
-  height: 15px;
+  height: 10px;
 }
