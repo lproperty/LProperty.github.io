@@ -15,6 +15,7 @@
   var boxDayWeightChart = dc.boxPlot("#boxDayWeightChart");
   var boxMonthWeightChart = dc.boxPlot("#boxMonthWeightChart");
 
+
 //Data input
   d3.csv("opendata.csv", function (error, data) {
     if (error) throw error;
