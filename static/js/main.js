@@ -15,6 +15,7 @@
   var boxDayWeightChart = dc.boxPlot("#boxDayWeightChart");
   var boxMonthWeightChart = dc.boxPlot("#boxMonthWeightChart");
 
+
 //Data input
   d3.csv("opendata.csv", function (error, data) {
     if (error) throw error;
@@ -315,7 +316,7 @@
           var format = d3.format("02d");
           return d["Check in Date"].getFullYear() + "/" + format((d["Check in Date"].getMonth() + 1));
       })
-      .size(10)
+      .size(100)
       .columns([
         {
           label: "Check in Date",

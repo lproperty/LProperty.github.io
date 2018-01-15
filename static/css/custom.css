@@ -46,6 +46,7 @@
  .navbar a.navbar-brand {
    color: #d7d7d7;
    text-decoration: none;
+   margin-left: 3px !important;
  }
  .navbar-inverse .navbar-nav>.active>a,
  .navbar-inverse .navbar-nav>.active>a:hover,
@@ -90,4 +91,8 @@
 .scroll-adjust{
 padding-top: 60px;
 margin-top: -60px;
+}
+
+.filler{
+  height: 10px;
 }
