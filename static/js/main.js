@@ -14,7 +14,7 @@
   var boxMonthVolumeChart = dc.boxPlot("#boxMonthVolumeChart");
   var boxDayWeightChart = dc.boxPlot("#boxDayWeightChart");
   var boxMonthWeightChart = dc.boxPlot("#boxMonthWeightChart");
-
+  // var boxDayNoChart = dc.boxPlot("#boxDayNoChart");
 
 //Data input
   d3.csv("opendata.csv", function (error, data) {
@@ -302,6 +302,16 @@
           .yAxisLabel("Shipment Weight (t)")
           .elasticY(true)
           .elasticX(true);
+
+        // boxDayNoChart
+        //   .width(450)
+        //   .height(300)
+        //   .margins({top: 10, right: 50, bottom: 30, left: 30})
+        //   .dimension(boxDayDim)
+        //   .group(boxDayNoGroup)
+        //   .tickFormat(d3.format(".1f"))
+        //   .yAxisLabel("No. of Shipments")
+        //   .elasticY(true);
 
 //Table
     visCount
