@@ -47,7 +47,7 @@
     var monthOfYearDim = dat.dimension(function (d) {
         var month = d["Check in Date"].getMonth();
         var name = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        return (month+1) + '.' + name[month];
+        return name[month];
     });
     var quarterDim = dat.dimension(function (d) {
         var month = d["Check in Date"].getMonth();
@@ -64,7 +64,7 @@
     var boxDayDim = dat.dimension(function (d) {
         var day = d["Check in Date"].getDay();
         var name = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        return day + '.' + name[day];
+        return name[day];
     });
     var boxMonthDim = dat.dimension(function (d) {
         var month = d["Check in Date"].getMonth();
@@ -130,7 +130,6 @@
       function(p,v) {
         var index = p.map(function(d) { return d.date.getTime();}).indexOf(v["Check in Date"].getTime());
         if( (p[index]["volume"] - v.Vol) < -0.001) { //0.001 is to avoid rounding-off error
-          console.log(p[index]["volume"], v.Vol);
           throw error;
         }
         if(p[index]["volume"] == v.Vol) {
@@ -145,20 +144,35 @@
         return [];
       }
     );
-    console.log(boxDayVolumeGroup.all());
     var boxMonthVolumeGroup = boxMonthDim.group().reduce(
       function(p,v) {
-        p.push(v.Vol);
+        var index = p.map(function(d) { return d.date.getTime();}).indexOf(v["Check in Date"].getTime());
+        if(index == -1) {
+          p.push({date:v["Check in Date"], volume:v.Vol});
+        }
+        else {
+          p[index]["volume"] += v.Vol;
+        }
         return p;
       },
       function(p,v) {
-        p.splice(p.indexOf(v.Vol), 1);
+        var index = p.map(function(d) { return d.date.getTime();}).indexOf(v["Check in Date"].getTime());
+        if( (p[index]["volume"] - v.Vol) < -0.001) { //0.001 is to avoid rounding-off error
+          throw error;
+        }
+        if(p[index]["volume"] == v.Vol) {
+          p.splice(index,1);
+        }
+        else {
+          p[index]["volume"] -= v.Vol;
+        }
         return p;
       },
       function() {
         return [];
       }
     );
+
     var boxDayWeightGroup = boxDayDim.group().reduce(
       function(p,v) {
         p.push(v.Weight);
@@ -279,9 +293,6 @@ function checkTimeEqual(array, attr, value) {
         .dimension(monthOfYearDim)
         // Assign colors to each value in the x scale domain
         // .ordinalColors(['#3182bd', '#3097bd', '#6baed6', '#7cbce2', '#9ecae1', '#c6dbef', '#dadaeb'])
-        .label(function (d) {
-            return d.key.split('.')[1];
-        })
         // Title sets the row text
         .title(function (d) {
             return d.value;
@@ -332,26 +343,37 @@ function checkTimeEqual(array, attr, value) {
           return array;
         })
         .ordinalColors(['#9ecae1'])
+        .x(d3.scale.ordinal().domain(["Mon", "Tue", "Wed", "Thu","Fri","Sat","Sun"]))
         .tickFormat(d3.format(".2s"))
         .yAxisLabel("Shipment Volume (m³)")
         .elasticY(true)
         .yAxisPadding("5%")
         .yAxis().tickFormat(d3.format(".1s"));
-
         // In case that it's desirable to disable filter function.
         //filter = function() {};
-        //
-        // boxMonthVolumeChart
-        //   .width(850)
-        //   .height(300)
-        //   .margins({top: 10, right: 50, bottom: 30, left: 30})
-        //   .dimension(boxMonthDim)
-        //   .group(boxMonthVolumeGroup)
-        //   .tickFormat(d3.format(".1f"))
-        //   .yAxisLabel("Shipment Volume (m³)")
-        //   .elasticY(true)
-        //   .elasticX(true);
-        //
+
+        boxMonthVolumeChart
+          .width(850)
+          .height(300)
+          .margins({top: 10, right: 50, bottom: 30, left: 30})
+          .dimension(boxMonthDim)
+          .group(boxMonthVolumeGroup)
+          .valueAccessor(function(p) {
+            var array = [];
+            for(var i = 0; i < p.value.length; i += 1) {
+              array.push(p.value[i].volume);
+            }
+            return array;
+          })
+          .ordinalColors(['#9ecae1'])
+          .x(d3.scale.ordinal().domain(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']))
+          .tickFormat(d3.format(".2s"))
+          .yAxisLabel("Shipment Volume (m³)")
+          .elasticY(true)
+          .elasticX(true)
+          .yAxisPadding("5%")
+          .yAxis().tickFormat(d3.format(".1s"));
+
         // boxDayWeightChart
         //   .width(450)
         //   .height(300)
