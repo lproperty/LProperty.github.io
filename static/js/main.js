@@ -331,43 +331,47 @@ function checkTimeEqual(array, attr, value) {
           }
           return array;
         })
-        .tickFormat(d3.format(".1f"))
+        .ordinalColors(['#9ecae1'])
+        .tickFormat(d3.format(".2s"))
         .yAxisLabel("Shipment Volume (m³)")
-        .elasticY(true);
+        .elasticY(true)
+        .yAxisPadding("5%")
+        .yAxis().tickFormat(d3.format(".1s"));
+
         // In case that it's desirable to disable filter function.
         //filter = function() {};
-
-        boxMonthVolumeChart
-          .width(850)
-          .height(300)
-          .margins({top: 10, right: 50, bottom: 30, left: 30})
-          .dimension(boxMonthDim)
-          .group(boxMonthVolumeGroup)
-          .tickFormat(d3.format(".1f"))
-          .yAxisLabel("Shipment Volume (m³)")
-          .elasticY(true)
-          .elasticX(true);
-
-        boxDayWeightChart
-          .width(450)
-          .height(300)
-          .margins({top: 10, right: 50, bottom: 30, left: 30})
-          .dimension(boxDayDim)
-          .group(boxDayWeightGroup)
-          .tickFormat(d3.format(".1f"))
-          .yAxisLabel("Shipment Weight (t)")
-          .elasticY(true);
-
-        boxMonthWeightChart
-          .width(850)
-          .height(300)
-          .margins({top: 10, right: 50, bottom: 30, left: 30})
-          .dimension(boxMonthDim)
-          .group(boxMonthWeightGroup)
-          .tickFormat(d3.format(".1f"))
-          .yAxisLabel("Shipment Weight (t)")
-          .elasticY(true)
-          .elasticX(true);
+        //
+        // boxMonthVolumeChart
+        //   .width(850)
+        //   .height(300)
+        //   .margins({top: 10, right: 50, bottom: 30, left: 30})
+        //   .dimension(boxMonthDim)
+        //   .group(boxMonthVolumeGroup)
+        //   .tickFormat(d3.format(".1f"))
+        //   .yAxisLabel("Shipment Volume (m³)")
+        //   .elasticY(true)
+        //   .elasticX(true);
+        //
+        // boxDayWeightChart
+        //   .width(450)
+        //   .height(300)
+        //   .margins({top: 10, right: 50, bottom: 30, left: 30})
+        //   .dimension(boxDayDim)
+        //   .group(boxDayWeightGroup)
+        //   .tickFormat(d3.format(".1f"))
+        //   .yAxisLabel("Shipment Weight (t)")
+        //   .elasticY(true);
+        //
+        // boxMonthWeightChart
+        //   .width(850)
+        //   .height(300)
+        //   .margins({top: 10, right: 50, bottom: 30, left: 30})
+        //   .dimension(boxMonthDim)
+        //   .group(boxMonthWeightGroup)
+        //   .tickFormat(d3.format(".1f"))
+        //   .yAxisLabel("Shipment Weight (t)")
+        //   .elasticY(true)
+        //   .elasticX(true);
 
 //Table
     visCount
