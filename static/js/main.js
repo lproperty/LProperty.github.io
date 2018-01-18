@@ -31,25 +31,25 @@
     });
 
 //Initiate Crossfilter instance
-    var ndx = crossfilter(data);
-    var all = ndx.groupAll();
+    var dat = crossfilter(data);
+    var all = dat.groupAll();
 
 //Dimensions
-    var tempConditionDim = ndx.dimension(function (d) {return d["Temp. Condition"]; });
-    var motDim = ndx.dimension(function (d) {return d["MoT"]; });
-    var checkInDateDim = ndx.dimension(function (d) { return d["Check in Date"]; });
-    var transportScopeDim = ndx.dimension(function (d) { return d.Scope;});
-    var dayOfWeekDim = ndx.dimension(function (d) {
+    var tempConditionDim = dat.dimension(function (d) {return d["Temp. Condition"]; });
+    var motDim = dat.dimension(function (d) {return d["MoT"]; });
+    var checkInDateDim = dat.dimension(function (d) { return d["Check in Date"]; });
+    var transportScopeDim = dat.dimension(function (d) { return d.Scope;});
+    var dayOfWeekDim = dat.dimension(function (d) {
         var day = d["Check in Date"].getDay();
         var name = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         return day + '.' + name[day];
     });
-    var monthOfYearDim = ndx.dimension(function (d) {
+    var monthOfYearDim = dat.dimension(function (d) {
         var month = d["Check in Date"].getMonth();
         var name = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         return (month+1) + '.' + name[month];
     });
-    var quarterDim = ndx.dimension(function (d) {
+    var quarterDim = dat.dimension(function (d) {
         var month = d["Check in Date"].getMonth();
         if (month <= 2) {
             return 'Q1';
@@ -61,12 +61,12 @@
             return 'Q4';
         }
     });
-    var boxDayDim = ndx.dimension(function (d) {
+    var boxDayDim = dat.dimension(function (d) {
         var day = d["Check in Date"].getDay();
         var name = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         return day + '.' + name[day];
     });
-    var boxMonthDim = ndx.dimension(function (d) {
+    var boxMonthDim = dat.dimension(function (d) {
         var month = d["Check in Date"].getMonth();
         var name = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         return (month+1) + '.' + name[month];
@@ -83,19 +83,69 @@
     var monthOfYearGroup = monthOfYearDim.group();
     var quarterGroup = quarterDim.group();
     var checkInDateGroup = checkInDateDim.group();
+    //
+    // var dateList = [];
+    // var boxDayVolumeGroup = boxDayDim.group().reduce(
+    //   function(p,v) {
+    //     var index = checkDateList(dateList,v["Check in Date"]);
+    //     console.log(index);
+    //     if( index == -1) {
+    //       dateList.push(v["Check in Date"]);
+    //       p.push(v.Vol);
+    //     }
+    //     else {
+    //       p[index] += v.Vol;
+    //     }
+    //   },
+    //   function(p,v) {
+    //         var index = checkDateList(dateList,v["Check in Date"]);
+    //         dateList.splice(index,1);
+    //         p.splice(index, 1);
+    //         return p;
+    //   },
+    //   function() {
+    //     return [];
+    //   }
+    // );
+    //
+    // function checkDateList(dateList, value) {
+    //     for(var i = 0; i < dateList.length; i += 1) {
+    //         if(dateList[i].getTime() == value.getTime()) {
+    //             return i;
+    //         }
+    //     }
+    //     return -1;
+    // }
     var boxDayVolumeGroup = boxDayDim.group().reduce(
       function(p,v) {
-        p.push(v.Vol);
+        var index = p.map(function(d) { return d.date.getTime();}).indexOf(v["Check in Date"].getTime());
+        if(index == -1) {
+          p.push({date:v["Check in Date"], volume:v.Vol});
+        }
+        else {
+          p[index]["volume"] += v.Vol;
+        }
         return p;
       },
       function(p,v) {
-        p.splice(p.indexOf(v.Vol), 1);
+        var index = p.map(function(d) { return d.date.getTime();}).indexOf(v["Check in Date"].getTime());
+        if( (p[index]["volume"] - v.Vol) < -0.001) { //0.001 is to avoid rounding-off error
+          console.log(p[index]["volume"], v.Vol);
+          throw error;
+        }
+        if(p[index]["volume"] == v.Vol) {
+          p.splice(index,1);
+        }
+        else {
+          p[index]["volume"] -= v.Vol;
+        }
         return p;
       },
       function() {
         return [];
       }
     );
+    console.log(boxDayVolumeGroup.all());
     var boxMonthVolumeGroup = boxMonthDim.group().reduce(
       function(p,v) {
         p.push(v.Vol);
@@ -135,6 +185,15 @@
         return [];
       }
     );
+//Helper funtions
+function checkTimeEqual(array, attr, value) {
+    for(var i = 0; i < array.length; i += 1) {
+        if(array[i][attr].getTime() == value.getTime()) {
+            return i;
+        }
+    }
+    return -1;
+}
 
 //Charts
     transportScopeChart
@@ -265,6 +324,13 @@
         .margins({top: 10, right: 50, bottom: 30, left: 30})
         .dimension(boxDayDim)
         .group(boxDayVolumeGroup)
+        .valueAccessor(function(p) {
+          var array = [];
+          for(var i = 0; i < p.value.length; i += 1) {
+            array.push(p.value[i].volume);
+          }
+          return array;
+        })
         .tickFormat(d3.format(".1f"))
         .yAxisLabel("Shipment Volume (m³)")
         .elasticY(true);
@@ -305,7 +371,7 @@
 
 //Table
     visCount
-      .dimension(ndx)
+      .dimension(dat)
       .group(all);
 
     visTable
