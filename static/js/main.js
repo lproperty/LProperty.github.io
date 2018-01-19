@@ -35,6 +35,7 @@
     var all = dat.groupAll();
     var weightSum = all.reduceSum(function(d){return d.Weight;}).value();
     var volumeSum = all.reduceSum(function(d){return d.Vol;}).value();
+    var all = dat.groupAll();
 
 //Dimensions
     var tempConditionDim = dat.dimension(function (d) {return d["Temp. Condition"]; });
@@ -43,12 +44,12 @@
     var transportScopeDim = dat.dimension(function (d) { return d.Scope;});
     var dayOfWeekDim = dat.dimension(function (d) {
         var day = d["Check in Date"].getDay();
-        var name = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        return day + '.' + name[day];
+        var name = ['7.Sun', '1.Mon', '2.Tue', '3.Wed', '4.Thu', '5.Fri', '6.Sat'];
+        return name[day];
     });
     var monthOfYearDim = dat.dimension(function (d) {
         var month = d["Check in Date"].getMonth();
-        var name = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var name = ['1.Jan', '2.Feb', '3.Mar', '4.Apr', '5.May', '6.Jun', '7.Jul', '8.Aug', '9.Sep', '10.Oct', '11.Nov', '12.Dec'];
         return name[month];
     });
     var quarterDim = dat.dimension(function (d) {
@@ -279,6 +280,7 @@ function checkTimeEqual(array, attr, value) {
         .dimension(dayOfWeekDim)
         // Assign colors to each value in the x scale domain
         .ordinalColors(['#3182bd', '#3097bd', '#6baed6', '#7cbce2', '#9ecae1', '#c6dbef', '#dadaeb'])
+        .ordering(function(){return;})
         .label(function (d) {
             return d.key.split('.')[1];
         })
@@ -297,6 +299,10 @@ function checkTimeEqual(array, attr, value) {
         .dimension(monthOfYearDim)
         // Assign colors to each value in the x scale domain
         // .ordinalColors(['#3182bd', '#3097bd', '#6baed6', '#7cbce2', '#9ecae1', '#c6dbef', '#dadaeb'])
+        .ordering(function(){return;})
+        .label(function (d) {
+            return d.key.split('.')[1];
+        })
         // Title sets the row text
         .title(function (d) {
             return d.value;
