@@ -33,6 +33,8 @@
 //Initiate Crossfilter instance
     var dat = crossfilter(data);
     var all = dat.groupAll();
+    var weightSum = all.reduceSum(function(d){return d.Weight;}).value();
+    var volumeSum = all.reduceSum(function(d){return d.Vol;}).value();
 
 //Dimensions
     var tempConditionDim = dat.dimension(function (d) {return d["Temp. Condition"]; });
@@ -76,12 +78,12 @@
     var minDate = checkInDateDim.bottom(1)[0]["Check in Date"];
     var maxDate = checkInDateDim.top(1)[0]["Check in Date"];
 
-    var tempConditionGroup = tempConditionDim.group();
-    var motGroup = motDim.group();
-    var transportScopeGroup = transportScopeDim.group();
+    var tempConditionGroup = tempConditionDim.group().reduceSum(function(d){return d.Weight});
+    var motGroup = motDim.group().reduceSum(function(d){return d.Weight});
+    var transportScopeGroup = transportScopeDim.group().reduceSum(function(d){return d.Weight});
     var dayOfWeekGroup = dayOfWeekDim.group();
     var monthOfYearGroup = monthOfYearDim.group();
-    var quarterGroup = quarterDim.group();
+    var quarterGroup = quarterDim.group().reduceSum(function(d){return d.Weight});
     var checkInDateGroup = checkInDateDim.group();
 
     var boxDayVolumeGroup = boxDayDim.group().reduce(
@@ -221,10 +223,11 @@ function checkTimeEqual(array, attr, value) {
         }
         var label = d.key;
         if (all.value()) {
-            label += '(' + Math.floor(d.value / all.value() * 100) + '%)';
+            label += '(' + Math.floor(d.value / weightSum * 100) + '%)';
         }
         return label;
         })
+      .minAngleForLabel(0.1)
       .transitionDuration(1200)
       .renderLabel(true);
 
@@ -240,11 +243,12 @@ function checkTimeEqual(array, attr, value) {
         }
         var label = d.key;
         if (all.value()) {
-            label += '(' + Math.floor(d.value / all.value() * 100) + '%)';
+            label += '(' + Math.floor(d.value / weightSum * 100) + '%)';
         }
         return label;
         })
       .transitionDuration(1200)
+      .minAngleForLabel(0.1)
       .renderLabel(true);
 
       tempConditionChart
@@ -259,10 +263,11 @@ function checkTimeEqual(array, attr, value) {
           }
           var label = d.key;
           if (all.value()) {
-              label += '(' + Math.floor(d.value / all.value() * 100) + '%)';
+              label += '(' + Math.floor(d.value / weightSum * 100) + '%)';
           }
           return label;
           })
+        .minAngleForLabel(0.1)
         .transitionDuration(1200)
         .renderLabel(true);
 
@@ -306,13 +311,14 @@ function checkTimeEqual(array, attr, value) {
         .innerRadius(30)
         .dimension(quarterDim)
         .group(quarterGroup)
+        .minAngleForLabel(0.1)
         .label(function (d) {
           if (tempConditionChart.hasFilter() && !tempConditionChart.hasFilter(d.key)) {
               return d.key + '(0%)';
           }
           var label = d.key;
           if (all.value()) {
-              label += '(' + Math.floor(d.value / all.value() * 100) + '%)';
+              label += '(' + Math.floor(d.value / weightSum * 100) + '%)';
           }
           return label;
           });
