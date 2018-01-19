@@ -83,39 +83,7 @@
     var monthOfYearGroup = monthOfYearDim.group();
     var quarterGroup = quarterDim.group();
     var checkInDateGroup = checkInDateDim.group();
-    //
-    // var dateList = [];
-    // var boxDayVolumeGroup = boxDayDim.group().reduce(
-    //   function(p,v) {
-    //     var index = checkDateList(dateList,v["Check in Date"]);
-    //     console.log(index);
-    //     if( index == -1) {
-    //       dateList.push(v["Check in Date"]);
-    //       p.push(v.Vol);
-    //     }
-    //     else {
-    //       p[index] += v.Vol;
-    //     }
-    //   },
-    //   function(p,v) {
-    //         var index = checkDateList(dateList,v["Check in Date"]);
-    //         dateList.splice(index,1);
-    //         p.splice(index, 1);
-    //         return p;
-    //   },
-    //   function() {
-    //     return [];
-    //   }
-    // );
-    //
-    // function checkDateList(dateList, value) {
-    //     for(var i = 0; i < dateList.length; i += 1) {
-    //         if(dateList[i].getTime() == value.getTime()) {
-    //             return i;
-    //         }
-    //     }
-    //     return -1;
-    // }
+
     var boxDayVolumeGroup = boxDayDim.group().reduce(
       function(p,v) {
         var index = p.map(function(d) { return d.date.getTime();}).indexOf(v["Check in Date"].getTime());
@@ -175,11 +143,26 @@
 
     var boxDayWeightGroup = boxDayDim.group().reduce(
       function(p,v) {
-        p.push(v.Weight);
+        var index = p.map(function(d) { return d.date.getTime();}).indexOf(v["Check in Date"].getTime());
+        if(index == -1) {
+          p.push({date:v["Check in Date"], weight:v.Weight});
+        }
+        else {
+          p[index]["weight"] += v.Weight;
+        }
         return p;
       },
       function(p,v) {
-        p.splice(p.indexOf(v.Weight), 1);
+        var index = p.map(function(d) { return d.date.getTime();}).indexOf(v["Check in Date"].getTime());
+        if( (p[index]["weight"] - v.Weight) < -0.001) { //0.001 is to avoid rounding-off error
+          throw error;
+        }
+        if(p[index]["weight"] == v.Weight) {
+          p.splice(index,1);
+        }
+        else {
+          p[index]["weight"] -= v.Weight;
+        }
         return p;
       },
       function() {
@@ -188,17 +171,33 @@
     );
     var boxMonthWeightGroup = boxMonthDim.group().reduce(
       function(p,v) {
-        p.push(v.Weight);
+        var index = p.map(function(d) { return d.date.getTime();}).indexOf(v["Check in Date"].getTime());
+        if(index == -1) {
+          p.push({date:v["Check in Date"], weight:v.Weight});
+        }
+        else {
+          p[index]["weight"] += v.Weight;
+        }
         return p;
       },
       function(p,v) {
-        p.splice(p.indexOf(v.Weight), 1);
+        var index = p.map(function(d) { return d.date.getTime();}).indexOf(v["Check in Date"].getTime());
+        if( (p[index]["weight"] - v.Weight) < -0.001) { //0.001 is to avoid rounding-off error
+          throw error;
+        }
+        if(p[index]["weight"] == v.Weight) {
+          p.splice(index,1);
+        }
+        else {
+          p[index]["weight"] -= v.Weight;
+        }
         return p;
       },
       function() {
         return [];
       }
     );
+
 //Helper funtions
 function checkTimeEqual(array, attr, value) {
     for(var i = 0; i < array.length; i += 1) {
@@ -374,26 +373,48 @@ function checkTimeEqual(array, attr, value) {
           .yAxisPadding("5%")
           .yAxis().tickFormat(d3.format(".1s"));
 
-        // boxDayWeightChart
-        //   .width(450)
-        //   .height(300)
-        //   .margins({top: 10, right: 50, bottom: 30, left: 30})
-        //   .dimension(boxDayDim)
-        //   .group(boxDayWeightGroup)
-        //   .tickFormat(d3.format(".1f"))
-        //   .yAxisLabel("Shipment Weight (t)")
-        //   .elasticY(true);
-        //
-        // boxMonthWeightChart
-        //   .width(850)
-        //   .height(300)
-        //   .margins({top: 10, right: 50, bottom: 30, left: 30})
-        //   .dimension(boxMonthDim)
-        //   .group(boxMonthWeightGroup)
-        //   .tickFormat(d3.format(".1f"))
-        //   .yAxisLabel("Shipment Weight (t)")
-        //   .elasticY(true)
-        //   .elasticX(true);
+        boxDayWeightChart
+          .width(450)
+          .height(300)
+          .margins({top: 10, right: 50, bottom: 30, left: 30})
+          .dimension(boxDayDim)
+          .group(boxDayWeightGroup)
+          .valueAccessor(function(p) {
+            var array = [];
+            for(var i = 0; i < p.value.length; i += 1) {
+              array.push(p.value[i].weight);
+            }
+            return array;
+          })
+          .ordinalColors(['#9ecae1'])
+          .x(d3.scale.ordinal().domain(["Mon", "Tue", "Wed", "Thu","Fri","Sat","Sun"]))
+          .tickFormat(d3.format(".2s"))
+          .yAxisLabel("Shipment Weight (t)")
+          .elasticY(true)
+          .yAxisPadding("5%")
+          .yAxis().tickFormat(d3.format(".1s"));
+
+        boxMonthWeightChart
+          .width(850)
+          .height(300)
+          .margins({top: 10, right: 50, bottom: 30, left: 30})
+          .dimension(boxMonthDim)
+          .group(boxMonthWeightGroup)
+          .valueAccessor(function(p) {
+            var array = [];
+            for(var i = 0; i < p.value.length; i += 1) {
+              array.push(p.value[i].weight);
+            }
+            return array;
+          })
+          .ordinalColors(['#9ecae1'])
+          .x(d3.scale.ordinal().domain(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']))
+          .tickFormat(d3.format(".2s"))
+          .yAxisLabel("Shipment Weight (t)")
+          .elasticY(true)
+          .elasticX(true)
+          .yAxisPadding("5%")
+          .yAxis().tickFormat(d3.format(".1s"));
 
 //Table
     visCount
