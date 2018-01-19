@@ -23,7 +23,8 @@
 //Data manipulation
     var dateFormat = d3.time.format('%m/%d/%Y');
     var numberFormat = d3.format('.2f');
-    data.forEach(function(d) {
+
+    data.forEach(function(d) { //Mainly for data type coersion
       d.Vol = +d.Vol;
       d.Weight = +d.Weight;
       d["Check in Date"] = dateFormat.parse(d["Check in Date"]);
@@ -210,6 +211,10 @@ function checkTimeEqual(array, attr, value) {
     }
     return -1;
 }
+
+  //Miscellaneous
+    document.getElementById("dateRange").innerHTML = 'Date Range: ' + dateFormat(minDate) + ' to ' + dateFormat(maxDate);
+
 
 //Charts
     transportScopeChart

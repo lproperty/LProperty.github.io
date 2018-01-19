@@ -6,7 +6,21 @@
   .dc-chart g.box circle {
     r: 0px;
   }
-
+  .dc-chart .text-anchor{
+    font-size: 100px;
+  }
+  .dc-data-count {
+    margin-top: auto;
+    margin-right: auto;
+    padding-right: 25px;
+  }
+  .dataSelected {
+    float: right;
+  }
+  #dateRange {
+    margin-bottom: 0px;
+    float: right;
+  }
 
 /* Others */
   .no-js #loader { display: none;  }
