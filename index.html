@@ -26,12 +26,26 @@
   </div>
 
   <!-- Nav tabs -->
-<ul class="nav nav-pills" role="tablist">
-  <li class="active"><a href="#section1" role="tab" data-toggle="tab">Criteria Selection</a></li>
-  <li><a href="#section2" role="tab" data-toggle="tab">Charts & Graphs</a></li>
-  <li><a href="#section3" role="tab" data-toggle="tab">Cost Savings</a></li>
-  <li><a href="#section4" role="tab" data-toggle="tab">Data Table</a></li>
-</ul>
+<div class="row">
+  <div class="col-md-8">
+    <ul class="nav nav-pills" role="tablist">
+      <li class="active"><a href="#section1" role="tab" data-toggle="tab">Criteria Selection</a></li>
+      <li><a href="#section2" role="tab" data-toggle="tab">Charts & Graphs</a></li>
+      <li><a href="#section3" role="tab" data-toggle="tab">Cost Savings</a></li>
+      <li><a href="#section4" role="tab" data-toggle="tab">Data Table</a></li>
+    </ul>
+  </div>
+  <div class="dc-data-count col-md-4">
+      <p id="dateRange"></p>
+      <div class="dataSelected">
+        <span class="filter-count"></span> selected out of <span class="total-count"></span> records | <a
+              href="javascript:dc.filterAll(); dc.renderAll();">Reset All</a>
+      </div>
+  </div>
+
+
+</div>
+
 
 <!-- Tab panes -->
 <div class="tab-content">
@@ -309,10 +323,6 @@
           Data Table
         </div>
         <div class="chart-stage">
-          <div class="dc-data-count">
-              <span class="filter-count"></span> selected out of <span class="total-count"></span> records | <a
-                  href="javascript:dc.filterAll(); dc.renderAll();">Reset All</a>
-          </div>
           <table class="table table-hover dc-data-table">
           </table>
         </div>
