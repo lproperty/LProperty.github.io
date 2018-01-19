@@ -74,7 +74,7 @@
     var boxMonthDim = dat.dimension(function (d) {
         var month = d["Check in Date"].getMonth();
         var name = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        return (month+1) + '.' + name[month];
+        return name[month];
     });
 
 //Metrics
@@ -387,7 +387,7 @@ function checkTimeEqual(array, attr, value) {
           .tickFormat(d3.format(".2s"))
           .yAxisLabel("Shipment Volume (m³)")
           .elasticY(true)
-          .elasticX(true)
+          // .elasticX(true)
           .yAxisPadding("5%")
           .yAxis().tickFormat(d3.format(".1s"));
 
@@ -430,7 +430,7 @@ function checkTimeEqual(array, attr, value) {
           .tickFormat(d3.format(".2s"))
           .yAxisLabel("Shipment Weight (t)")
           .elasticY(true)
-          .elasticX(true)
+          // .elasticX(true)
           .yAxisPadding("5%")
           .yAxis().tickFormat(d3.format(".1s"));
 
