@@ -37,7 +37,7 @@
     var all = dat.groupAll();
     var weightSum = all.reduceSum(function(d){return d.Weight;}).value();
     var volumeSum = all.reduceSum(function(d){return d.Vol;}).value();
-    var all = dat.groupAll();
+    var all = dat.groupAll();//Re-grouping all data
 
 //Dimensions
     var tempConditionDim = dat.dimension(function (d) {return d["Temp. Condition"]; });
