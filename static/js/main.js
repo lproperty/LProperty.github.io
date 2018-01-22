@@ -97,7 +97,7 @@
           p.push({date:v["Check in Date"], volume:v.Vol});
         }
         else {
-          p[index]["volume"] += v.Vol;
+          p[index]["volume"] = Math.round((p[index]["volume"]+v.Vol) * 10) / 10;
         }
         return p;
       },
@@ -110,7 +110,7 @@
           p.splice(index,1);
         }
         else {
-          p[index]["volume"] -= v.Vol;
+          p[index]["volume"] = Math.round((p[index]["volume"]-v.Vol) * 10) / 10;
         }
         return p;
       },
@@ -125,7 +125,7 @@
           p.push({date:v["Check in Date"], volume:v.Vol});
         }
         else {
-          p[index]["volume"] += v.Vol;
+          p[index]["volume"] = Math.round((p[index]["volume"]+v.Vol) * 10) / 10;
         }
         return p;
       },
@@ -138,7 +138,7 @@
           p.splice(index,1);
         }
         else {
-          p[index]["volume"] -= v.Vol;
+          p[index]["volume"] = Math.round((p[index]["volume"]-v.Vol) * 10) / 10;
         }
         return p;
       },
@@ -154,7 +154,7 @@
           p.push({date:v["Check in Date"], weight:v.Weight});
         }
         else {
-          p[index]["weight"] += v.Weight;
+          p[index]["weight"] = Math.round((p[index]["weight"]+v.Weight) * 10) / 10;
         }
         return p;
       },
@@ -167,7 +167,7 @@
           p.splice(index,1);
         }
         else {
-          p[index]["weight"] -= v.Weight;
+          p[index]["weight"] = Math.round((p[index]["weight"]-v.Weight) * 10) / 10;
         }
         return p;
       },
@@ -182,7 +182,7 @@
           p.push({date:v["Check in Date"], weight:v.Weight});
         }
         else {
-          p[index]["weight"] += v.Weight;
+          p[index]["weight"] = Math.round((p[index]["weight"]+v.Weight) * 10) / 10;
         }
         return p;
       },
@@ -195,7 +195,7 @@
           p.splice(index,1);
         }
         else {
-          p[index]["weight"] -= v.Weight;
+          p[index]["weight"] = Math.round((p[index]["weight"]-v.Weight) * 10) / 10;
         }
         return p;
       },
