@@ -16,6 +16,8 @@
   var boxMonthWeightChart = dc.boxPlot("#boxMonthWeightChart");
   var boxDayNoChart = dc.boxPlot("#boxDayNoChart");
   var boxMonthNoChart = dc.boxPlot("#boxMonthNoChart");
+  var boxDayLFChart = dc.boxPlot("#boxDayLFChart");
+  var boxMonthLFChart = dc.boxPlot("#boxMonthLFChart");
 
   //Data input: This invokes the d3.csv request and the function points to the data file "opendata.csv" that will be loaded
   d3.csv("opendata.csv", function (error, data) { //with the file requested, the script carries out a function on the data (which is now called 'data')
@@ -27,8 +29,9 @@
 
     //Mainly for data type coversion
     data.forEach(function(d) { //for each group within the 'data' array, do the following
-      d.Vol = +d.Vol; //sets the 'Vol' values in 'data' to numeric values if it isn't already by using the '+' operator
+      d.Vol = + d.Vol; //sets the 'Vol' values in 'data' to numeric values if it isn't already by using the '+' operator
       d.Weight = +d.Weight; //sets the 'Weight' values in 'data' to numeric values if it isn't already by using the '+' operator
+      d.LF = +d.LF;
       d["Check in Date"] = dateFormat.parse(d["Check in Date"]);
       d["Check in Date"].setFullYear(2000 + d["Check in Date"].getFullYear());
     });
@@ -89,6 +92,34 @@
     var monthOfYearGroup = monthOfYearDim.group();
     var quarterGroup = quarterDim.group().reduceSum(function(d){return d.Weight});
     var checkInDateGroup = checkInDateDim.group();
+
+    var boxDayLFGroup = boxDayDim.group().reduce(
+      function(p,v) {
+        p.push(v.LF);
+        return p;
+      },
+      function(p,v) {
+        p.splice(p.indexOf(v.LF), 1);
+        return p;
+      },
+      function() {
+        return [];
+      }
+    );
+
+    var boxMonthLFGroup = boxMonthDim.group().reduce(
+      function(p,v) {
+        p.push(v.LF);
+        return p;
+      },
+      function(p,v) {
+        p.splice(p.indexOf(v.LF), 1);
+        return p;
+      },
+      function() {
+        return [];
+      }
+    );
 
     var boxDayVolumeGroup = boxDayDim.group().reduce(
       function(p,v) {
@@ -421,9 +452,8 @@ function checkTimeEqual(array, attr, value) {
         .yAxisLabel("Shipment Volume (m³)")
         .elasticY(true)
         .yAxisPadding("5%")
-        .yAxis().tickFormat(d3.format(".1s"));
-        // In case that it's desirable to disable filter function.
-        //filter = function() {};
+        .yAxis().tickFormat(d3.format(".1s"))
+        .filter = function() {};
 
       boxMonthVolumeChart
         .width(850)
@@ -445,7 +475,8 @@ function checkTimeEqual(array, attr, value) {
         .elasticY(true)
         // .elasticX(true)
         .yAxisPadding("5%")
-        .yAxis().tickFormat(d3.format(".1s"));
+        .yAxis().tickFormat(d3.format(".1s"))
+        .filter = function() {};
 
       boxDayWeightChart
         .width(450)
@@ -466,7 +497,8 @@ function checkTimeEqual(array, attr, value) {
         .yAxisLabel("Shipment Weight (t)")
         .elasticY(true)
         .yAxisPadding("5%")
-        .yAxis().tickFormat(d3.format(".1s"));
+        .yAxis().tickFormat(d3.format(".1s"))
+        .filter = function() {};
 
       boxMonthWeightChart
         .width(850)
@@ -488,7 +520,8 @@ function checkTimeEqual(array, attr, value) {
         .elasticY(true)
         // .elasticX(true)
         .yAxisPadding("5%")
-        .yAxis().tickFormat(d3.format(".1s"));
+        .yAxis().tickFormat(d3.format(".1s"))
+        .filter = function() {};
 
       boxDayNoChart
         .width(450)
@@ -507,7 +540,8 @@ function checkTimeEqual(array, attr, value) {
         .x(d3.scale.ordinal().domain(["Mon", "Tue", "Wed", "Thu","Fri","Sat","Sun"]))
         .yAxisLabel("Number of Shipments")
         .elasticY(true)
-        .yAxisPadding("5%");
+        .yAxisPadding("5%")
+        .filter = function() {};
 
       boxMonthNoChart
         .width(850)
@@ -526,7 +560,34 @@ function checkTimeEqual(array, attr, value) {
         .x(d3.scale.ordinal().domain(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']))
         .yAxisLabel("Number of Shipments")
         .elasticY(true)
-        .yAxisPadding("5%");
+        .yAxisPadding("5%")
+        .filter = function() {};
+
+      boxDayLFChart
+        .width(450)
+        .height(300)
+        .margins({top: 10, right: 50, bottom: 30, left: 30})
+        .dimension(boxDayDim)
+        .group(boxDayLFGroup)
+        .ordinalColors(['#9ecae1'])
+        .x(d3.scale.ordinal().domain(["Mon", "Tue", "Wed", "Thu","Fri","Sat","Sun"]))
+        .yAxisLabel("Load Fill Percentage")
+        .elasticY(true)
+        .yAxisPadding("5%")
+        .filter = function() {};
+
+      boxMonthLFChart
+        .width(850)
+        .height(300)
+        .margins({top: 10, right: 50, bottom: 30, left: 30})
+        .dimension(boxMonthDim)
+        .group(boxMonthLFGroup)
+        .ordinalColors(['#9ecae1'])
+        .x(d3.scale.ordinal().domain(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']))
+        .yAxisLabel("Load Fill Percentage")
+        .elasticY(true)
+        .yAxisPadding("5%")
+        .filter = function() {};
 
 //Table
     visCount
