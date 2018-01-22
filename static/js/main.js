@@ -221,6 +221,10 @@
           throw error;
         }
         p[index]["number"]--;
+        //splice the "0"s off
+        if(p[index]["number"] == 0) {
+          p.splice(index,1);
+        }
         return p;
       },
       function() {
@@ -241,10 +245,14 @@
       },
       function(p,v) {
         var index = p.map(function(d) { return d.date.getTime();}).indexOf(v["Check in Date"].getTime());
-        if( (p[index]["number"]) <= 0) {
+        if( p[index]["number"] <= 0) {
           throw error;
         }
         p[index]["number"]--;
+        //splice the "0"s off
+        if(p[index]["number"] == 0) {
+          p.splice(index,1);
+        }
         return p;
       },
       function() {
@@ -519,7 +527,7 @@ function checkTimeEqual(array, attr, value) {
         .yAxisLabel("Number of Shipments")
         .elasticY(true)
         .yAxisPadding("5%");
-        
+
 //Table
     visCount
       .dimension(dat)
