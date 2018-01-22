@@ -14,7 +14,8 @@
   var boxMonthVolumeChart = dc.boxPlot("#boxMonthVolumeChart");
   var boxDayWeightChart = dc.boxPlot("#boxDayWeightChart");
   var boxMonthWeightChart = dc.boxPlot("#boxMonthWeightChart");
-
+  var boxDayNoChart = dc.boxPlot("#boxDayNoChart");
+  var boxMonthNoChart = dc.boxPlot("#boxMonthNoChart");
 
   //Data input: This invokes the d3.csv request and the function points to the data file "opendata.csv" that will be loaded
   d3.csv("opendata.csv", function (error, data) { //with the file requested, the script carries out a function on the data (which is now called 'data')
@@ -203,6 +204,53 @@
       }
     );
 
+    var boxDayNoGroup = boxDayDim.group().reduce(
+      function(p,v) {
+        var index = p.map(function(d) { return d.date.getTime();}).indexOf(v["Check in Date"].getTime());
+        if(index == -1) {
+          p.push({date:v["Check in Date"], number:1});
+        }
+        else {
+          p[index]["number"]++;
+        }
+        return p;
+      },
+      function(p,v) {
+        var index = p.map(function(d) { return d.date.getTime();}).indexOf(v["Check in Date"].getTime());
+        if( (p[index]["number"]) <= 0) {
+          throw error;
+        }
+        p[index]["number"]--;
+        return p;
+      },
+      function() {
+        return [];
+      }
+    );
+
+    var boxMonthNoGroup = boxMonthDim.group().reduce(
+      function(p,v) {
+        var index = p.map(function(d) { return d.date.getTime();}).indexOf(v["Check in Date"].getTime());
+        if(index == -1) {
+          p.push({date:v["Check in Date"], number:1});
+        }
+        else {
+          p[index]["number"]++;
+        }
+        return p;
+      },
+      function(p,v) {
+        var index = p.map(function(d) { return d.date.getTime();}).indexOf(v["Check in Date"].getTime());
+        if( (p[index]["number"]) <= 0) {
+          throw error;
+        }
+        p[index]["number"]--;
+        return p;
+      },
+      function() {
+        return [];
+      }
+    );
 //Helper funtions
 function checkTimeEqual(array, attr, value) {
     for(var i = 0; i < array.length; i += 1) {
@@ -369,71 +417,109 @@ function checkTimeEqual(array, attr, value) {
         // In case that it's desirable to disable filter function.
         //filter = function() {};
 
-        boxMonthVolumeChart
-          .width(850)
-          .height(300)
-          .margins({top: 10, right: 50, bottom: 30, left: 30})
-          .dimension(boxMonthDim)
-          .group(boxMonthVolumeGroup)
-          .valueAccessor(function(p) {
-            var array = [];
-            for(var i = 0; i < p.value.length; i += 1) {
-              array.push(p.value[i].volume);
-            }
-            return array;
-          })
-          .ordinalColors(['#9ecae1'])
-          .x(d3.scale.ordinal().domain(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']))
-          .tickFormat(d3.format(".2s"))
-          .yAxisLabel("Shipment Volume (m³)")
-          .elasticY(true)
-          // .elasticX(true)
-          .yAxisPadding("5%")
-          .yAxis().tickFormat(d3.format(".1s"));
+      boxMonthVolumeChart
+        .width(850)
+        .height(300)
+        .margins({top: 10, right: 50, bottom: 30, left: 30})
+        .dimension(boxMonthDim)
+        .group(boxMonthVolumeGroup)
+        .valueAccessor(function(p) {
+          var array = [];
+          for(var i = 0; i < p.value.length; i += 1) {
+            array.push(p.value[i].volume);
+          }
+          return array;
+        })
+        .ordinalColors(['#9ecae1'])
+        .x(d3.scale.ordinal().domain(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']))
+        .tickFormat(d3.format(".2s"))
+        .yAxisLabel("Shipment Volume (m³)")
+        .elasticY(true)
+        // .elasticX(true)
+        .yAxisPadding("5%")
+        .yAxis().tickFormat(d3.format(".1s"));
 
-        boxDayWeightChart
-          .width(450)
-          .height(300)
-          .margins({top: 10, right: 50, bottom: 30, left: 30})
-          .dimension(boxDayDim)
-          .group(boxDayWeightGroup)
-          .valueAccessor(function(p) {
-            var array = [];
-            for(var i = 0; i < p.value.length; i += 1) {
-              array.push(p.value[i].weight);
-            }
-            return array;
-          })
-          .ordinalColors(['#9ecae1'])
-          .x(d3.scale.ordinal().domain(["Mon", "Tue", "Wed", "Thu","Fri","Sat","Sun"]))
-          .tickFormat(d3.format(".2s"))
-          .yAxisLabel("Shipment Weight (t)")
-          .elasticY(true)
-          .yAxisPadding("5%")
-          .yAxis().tickFormat(d3.format(".1s"));
+      boxDayWeightChart
+        .width(450)
+        .height(300)
+        .margins({top: 10, right: 50, bottom: 30, left: 30})
+        .dimension(boxDayDim)
+        .group(boxDayWeightGroup)
+        .valueAccessor(function(p) {
+          var array = [];
+          for(var i = 0; i < p.value.length; i += 1) {
+            array.push(p.value[i].weight);
+          }
+          return array;
+        })
+        .ordinalColors(['#9ecae1'])
+        .x(d3.scale.ordinal().domain(["Mon", "Tue", "Wed", "Thu","Fri","Sat","Sun"]))
+        .tickFormat(d3.format(".2s"))
+        .yAxisLabel("Shipment Weight (t)")
+        .elasticY(true)
+        .yAxisPadding("5%")
+        .yAxis().tickFormat(d3.format(".1s"));
 
-        boxMonthWeightChart
-          .width(850)
-          .height(300)
-          .margins({top: 10, right: 50, bottom: 30, left: 30})
-          .dimension(boxMonthDim)
-          .group(boxMonthWeightGroup)
-          .valueAccessor(function(p) {
-            var array = [];
-            for(var i = 0; i < p.value.length; i += 1) {
-              array.push(p.value[i].weight);
-            }
-            return array;
-          })
-          .ordinalColors(['#9ecae1'])
-          .x(d3.scale.ordinal().domain(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']))
-          .tickFormat(d3.format(".2s"))
-          .yAxisLabel("Shipment Weight (t)")
-          .elasticY(true)
-          // .elasticX(true)
-          .yAxisPadding("5%")
-          .yAxis().tickFormat(d3.format(".1s"));
+      boxMonthWeightChart
+        .width(850)
+        .height(300)
+        .margins({top: 10, right: 50, bottom: 30, left: 30})
+        .dimension(boxMonthDim)
+        .group(boxMonthWeightGroup)
+        .valueAccessor(function(p) {
+          var array = [];
+          for(var i = 0; i < p.value.length; i += 1) {
+            array.push(p.value[i].weight);
+          }
+          return array;
+        })
+        .ordinalColors(['#9ecae1'])
+        .x(d3.scale.ordinal().domain(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']))
+        .tickFormat(d3.format(".2s"))
+        .yAxisLabel("Shipment Weight (t)")
+        .elasticY(true)
+        // .elasticX(true)
+        .yAxisPadding("5%")
+        .yAxis().tickFormat(d3.format(".1s"));
 
+      boxDayNoChart
+        .width(450)
+        .height(300)
+        .margins({top: 10, right: 50, bottom: 30, left: 30})
+        .dimension(boxDayDim)
+        .group(boxDayNoGroup)
+        .valueAccessor(function(p) {
+          var array = [];
+          for(var i = 0; i < p.value.length; i += 1) {
+            array.push(p.value[i].number);
+          }
+          return array;
+        })
+        .ordinalColors(['#9ecae1'])
+        .x(d3.scale.ordinal().domain(["Mon", "Tue", "Wed", "Thu","Fri","Sat","Sun"]))
+        .yAxisLabel("Number of Shipments")
+        .elasticY(true)
+        .yAxisPadding("5%");
+
+      boxMonthNoChart
+        .width(850)
+        .height(300)
+        .margins({top: 10, right: 50, bottom: 30, left: 30})
+        .dimension(boxMonthDim)
+        .group(boxMonthNoGroup)
+        .valueAccessor(function(p) {
+          var array = [];
+          for(var i = 0; i < p.value.length; i += 1) {
+            array.push(p.value[i].number);
+          }
+          return array;
+        })
+        .ordinalColors(['#9ecae1'])
+        .x(d3.scale.ordinal().domain(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']))
+        .yAxisLabel("Number of Shipments")
+        .elasticY(true)
+        .yAxisPadding("5%");
+        
 //Table
     visCount
       .dimension(dat)
