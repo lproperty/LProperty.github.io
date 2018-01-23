@@ -138,7 +138,7 @@
           throw error;
         }
         if(p[index]["volume"] == v.Vol) {
-          p.splice(index,1);
+          p[index]["volume"] = 0;
         }
         else {
           p[index]["volume"] = Math.round((p[index]["volume"]-v.Vol) * 10) / 10;
@@ -166,7 +166,7 @@
           throw error;
         }
         if(p[index]["volume"] == v.Vol) {
-          p.splice(index,1);
+          p[index]["volume"] = 0;
         }
         else {
           p[index]["volume"] = Math.round((p[index]["volume"]-v.Vol) * 10) / 10;
@@ -195,7 +195,7 @@
           throw error;
         }
         if(p[index]["weight"] == v.Weight) {
-          p.splice(index,1);
+          p[index]["volume"] = 0;
         }
         else {
           p[index]["weight"] = Math.round((p[index]["weight"]-v.Weight) * 10) / 10;
@@ -223,7 +223,7 @@
           throw error;
         }
         if(p[index]["weight"] == v.Weight) {
-          p.splice(index,1);
+          p[index]["volume"] = 0;
         }
         else {
           p[index]["weight"] = Math.round((p[index]["weight"]-v.Weight) * 10) / 10;
@@ -254,7 +254,7 @@
         p[index]["number"]--;
         //splice the "0"s off
         if(p[index]["number"] == 0) {
-          p.splice(index,1);
+          p[index]["volume"] = 0;
         }
         return p;
       },
@@ -282,7 +282,7 @@
         p[index]["number"]--;
         //splice the "0"s off
         if(p[index]["number"] == 0) {
-          p.splice(index,1);
+          p[index]["volume"] = 0;
         }
         return p;
       },
@@ -563,31 +563,31 @@ function checkTimeEqual(array, attr, value) {
         .yAxisPadding("5%")
         .filter = function() {};
 
-      boxDayLFChart
-        .width(450)
-        .height(300)
-        .margins({top: 10, right: 50, bottom: 30, left: 30})
-        .dimension(boxDayDim)
-        .group(boxDayLFGroup)
-        .ordinalColors(['#9ecae1'])
-        .x(d3.scale.ordinal().domain(["Mon", "Tue", "Wed", "Thu","Fri","Sat","Sun"]))
-        .yAxisLabel("Load Fill Percentage")
-        .elasticY(true)
-        .yAxisPadding("5%")
-        .filter = function() {};
-
-      boxMonthLFChart
-        .width(850)
-        .height(300)
-        .margins({top: 10, right: 50, bottom: 30, left: 30})
-        .dimension(boxMonthDim)
-        .group(boxMonthLFGroup)
-        .ordinalColors(['#9ecae1'])
-        .x(d3.scale.ordinal().domain(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']))
-        .yAxisLabel("Load Fill Percentage")
-        .elasticY(true)
-        .yAxisPadding("5%")
-        .filter = function() {};
+      // boxDayLFChart
+      //   .width(450)
+      //   .height(300)
+      //   .margins({top: 10, right: 50, bottom: 30, left: 30})
+      //   .dimension(boxDayDim)
+      //   .group(boxDayLFGroup)
+      //   .ordinalColors(['#9ecae1'])
+      //   .x(d3.scale.ordinal().domain(["Mon", "Tue", "Wed", "Thu","Fri","Sat","Sun"]))
+      //   .yAxisLabel("Load Fill Percentage")
+      //   .elasticY(true)
+      //   .yAxisPadding("5%")
+      //   .filter = function() {};
+      //
+      // boxMonthLFChart
+      //   .width(850)
+      //   .height(300)
+      //   .margins({top: 10, right: 50, bottom: 30, left: 30})
+      //   .dimension(boxMonthDim)
+      //   .group(boxMonthLFGroup)
+      //   .ordinalColors(['#9ecae1'])
+      //   .x(d3.scale.ordinal().domain(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']))
+      //   .yAxisLabel("Load Fill Percentage")
+      //   .elasticY(true)
+      //   .yAxisPadding("5%")
+      //   .filter = function() {};
 
 //Table
     visCount
