@@ -452,8 +452,8 @@ function checkTimeEqual(array, attr, value) {
         .yAxisLabel("Shipment Volume (m³)")
         .elasticY(true)
         .yAxisPadding("5%")
-        .yAxis().tickFormat(d3.format(".1s"))
         .filter = function() {};
+      boxDayVolumeChart.yAxis().tickFormat(d3.format(".1s"));
 
       boxMonthVolumeChart
         .width(850)
@@ -475,8 +475,8 @@ function checkTimeEqual(array, attr, value) {
         .elasticY(true)
         // .elasticX(true)
         .yAxisPadding("5%")
-        .yAxis().tickFormat(d3.format(".1s"))
         .filter = function() {};
+      boxMonthVolumeChart.yAxis().tickFormat(d3.format(".1s"));
 
       boxDayWeightChart
         .width(450)
@@ -497,8 +497,8 @@ function checkTimeEqual(array, attr, value) {
         .yAxisLabel("Shipment Weight (t)")
         .elasticY(true)
         .yAxisPadding("5%")
-        .yAxis().tickFormat(d3.format(".1s"))
         .filter = function() {};
+      boxDayWeightChart.yAxis().tickFormat(d3.format(".1s"));
 
       boxMonthWeightChart
         .width(850)
@@ -518,10 +518,10 @@ function checkTimeEqual(array, attr, value) {
         .tickFormat(d3.format(".2s"))
         .yAxisLabel("Shipment Weight (t)")
         .elasticY(true)
-        // .elasticX(true)
         .yAxisPadding("5%")
-        .yAxis().tickFormat(d3.format(".1s"))
         .filter = function() {};
+      //(the lib seems to not allow yAxis function in the main chart block)
+      boxMonthWeightChart.yAxis().tickFormat(d3.format(".1s"));
 
       boxDayNoChart
         .width(450)
