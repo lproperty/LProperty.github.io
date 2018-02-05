@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="./static/lib/css//bootstrap.min.css">
   <link rel="stylesheet" href="./static/lib/css/dc.css">
   <link rel="stylesheet" href="./static/css/custom.css">
+  <link rel="stylesheet" href="./static/lib/css/datepicker.css" />
 
 </head>
 <body class="application">
@@ -58,12 +59,13 @@
   <div class="alert alert-warning fade in" role="alert">
     <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
     <h4>Welcome to the logistics dashboard!</h4>
-    <p>Some message to guide the user.</p>
-    </p>
+    <p>Please click on the charts to select your data range.</p>
+
   </div>
 
-    <div class="row">
 
+    <div class="row">
+      <!--Contains block elements in the first row-->
       <div class="col-md-3">
         <div class="chart-wrapper">
           <div class="chart-title">
@@ -121,11 +123,10 @@
         </div>
       </div>
 
-
-
     </div>
 
     <div class="row">
+      <!--Contains block elements in the second row-->
       <div class="col-md-3">
         <div class="chart-wrapper">
           <div class="chart-title">
@@ -144,6 +145,7 @@
           </div> -->
         </div>
       </div>
+
       <div class="col-md-3">
         <div class="chart-wrapper">
           <div class="chart-title">
@@ -162,6 +164,7 @@
           </div> -->
         </div>
       </div>
+
       <div class="col-md-3">
         <div class="chart-wrapper">
           <div class="chart-title">
@@ -180,6 +183,7 @@
           </div> -->
         </div>
       </div>
+
       <div class="col-md-3">
         <div class="chart-wrapper">
           <div class="chart-title">
@@ -195,9 +199,89 @@
           </div>
         </div>
       </div>
+
     </div>
+
+    <div class="row">
+      <!--Contains block elements in the first row-->
+      <div class="col-md-3">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Testing
+          </div>
+          <div class="chart-stage">
+            <div id="monthOfYearChart">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:monthOfYearChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <!-- <div class="chart-notes">
+            Notes about this chart
+          </div> -->
+        </div>
+      </div>
+
+      <div class="col-md-9">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Summary Statistics
+          </div>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Original Set</th>
+                <th scope="col">Criterion Set</th>
+                <th scope="col">Percentage Difference</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Total Cases Transported</th>
+                <td> 1,050,577 </td>
+                <td> 1,008,169 </td>
+                <td> -4.04% </td>
+              </tr>
+              <tr>
+                <th scope="row">Average Cost per Case Transported</th>
+                <td> $164,258.17 </td>
+                <td> $163,764.61 </td>
+                <td> -0.30% </td>
+              </tr>
+              <tr>
+                <th scope="row">Total Tonnage Transported</th>
+                <td> 532,887.100 </td>
+                <td> 510,242.000 </td>
+                <td> -4.25% </td>
+              </tr>
+              <tr>
+                <th scope="row">Average Cost per Ton Transported³</th>
+                <td> $323,831.93 </td>
+                <td> $323,576.66 </td>
+                <td>-0.08% </td>
+              </tr>
+              <tr>
+                <th scope="row">Total Metre³ Transported</th>
+                <td> 49.983 </td>
+                <td> 47.747 </td>
+                <td> -4.47% </td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- <div class="chart-notes">
+            Notes about this chart
+          </div> -->
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
 </div>
-</div>
+
 <div class="tab-pane fade" id="section2">
 <div class="container-fluid">
   <div class="filler"></div>
@@ -216,6 +300,9 @@
           <div class="clearfix"></div>
         </div>
       </div>
+      <div class="chart-notes">
+        • Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4
+      </div>
     </div>
   </div>
   <div class="col-md-8">
@@ -230,6 +317,9 @@
              style="display: none;">reset</a>
           <div class="clearfix"></div>
         </div>
+      </div>
+      <div class="chart-notes">
+        • Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4
       </div>
     </div>
 </div>
@@ -355,6 +445,46 @@
         </div>
     </div>
     </div>
+
+  <!-- 5th row -->
+    <div class="row">
+      <div class="col-md-4">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Day-of-Week Truck Size Profile
+          </div>
+          <div class="chart-stage">
+            <div id="boxDayTSChart">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:boxDayTSChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="chart-notes">
+            • Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Month-of-year Truck Size Profile
+          </div>
+          <div class="chart-stage">
+            <div id="boxMonthTSChart">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:boxMonthTSChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="chart-notes">
+            • Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4
+          </div>
+        </div>
+    </div>
+    </div>
 </div>
 </div>
 
@@ -402,5 +532,11 @@
 <script src="./static/js/pre-loader.js"></script>
 <script src="./static/lib/js/modernizr.js"></script>
 
+<!-- Datepicker dependencies -->
+<script src="./static/js/datepicker.js"></script>
+<script src="./static/lib/js/moment.js"></script>
+<script src="./static/lib/js/transition.js"></script>
+<script src="./static/lib/js/collapse.js"></script>
+<script src="./static/lib/js/bootstrap-datepicker.js"></script>
 </body>
 </html>
