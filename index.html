@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="./static/lib/css//bootstrap.min.css">
   <link rel="stylesheet" href="./static/lib/css/dc.css">
   <link rel="stylesheet" href="./static/css/custom.css">
+  <link rel="stylesheet" href="./static/lib/css/datepicker.css" />
 
 </head>
 <body class="application">
@@ -58,8 +59,31 @@
   <div class="alert alert-warning fade in" role="alert">
     <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
     <h4>Welcome to the logistics dashboard!</h4>
-    <p>Some message to guide the user.</p>
-    </p>
+    <p>Please click on the charts to select your data range.</p>
+
+    <div class="container">
+        <div class='col-md-5'>
+            <div class="form-group">
+                <div class='input-group date' id='datetimepicker6'>
+                    <input type='text' class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class='col-md-5'>
+            <div class="form-group">
+                <div class='input-group date' id='datetimepicker7'>
+                    <input type='text' class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
   </div>
 
     <div class="row">
@@ -216,6 +240,9 @@
           <div class="clearfix"></div>
         </div>
       </div>
+      <div class="chart-notes">
+        • Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4
+      </div>
     </div>
   </div>
   <div class="col-md-8">
@@ -230,6 +257,9 @@
              style="display: none;">reset</a>
           <div class="clearfix"></div>
         </div>
+      </div>
+      <div class="chart-notes">
+        • Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4
       </div>
     </div>
 </div>
@@ -442,5 +472,10 @@
 <script src="./static/js/pre-loader.js"></script>
 <script src="./static/lib/js/modernizr.js"></script>
 
+<!-- Datepicker dependencies -->
+<script src="./static/lib/js/moment.js"></script>
+<script src="./static/lib/js/transition.js"></script>
+<script src="./static/lib/js/collapse.js"></script>
+<script src="./static/lib/js/bootstrap-datepicker.js"></script>
 </body>
 </html>

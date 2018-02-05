@@ -329,9 +329,9 @@ function checkTimeEqual(array, attr, value) {
     return -1;
 }
 
-  //Miscellaneous
-    document.getElementById("dateRange").innerHTML = 'Date Range: ' + dateFormat(minDate) + ' to ' + dateFormat(maxDate);
-
+//Miscellaneous
+document.getElementById("dateRange").innerHTML = 'Date Range: ' + dateFormat(minDate) + ' to ' + dateFormat(maxDate);
+$( "dateSelect" ).data( dateFormat(maxDate) + dateFormat(minDate) );
 
 //Charts
     transportScopeChart
