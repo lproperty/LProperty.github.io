@@ -4,14 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "python test.py && electron ."
+    "start": "electron ."
   },
   "author": "LP",
   "license": "",
   "devDependencies": {
     "electron": "^1.8.2"
   },
-  "dependencies": {
-    "python-shell": "^0.4.0"
-  }
+  "dependencies": {}
 }
