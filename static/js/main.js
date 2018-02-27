@@ -21,24 +21,38 @@
   var boxDayTSChart = dc.boxPlot("#boxDayTSChart");
   var boxMonthTSChart = dc.boxPlot("#boxMonthTSChart");
 
+
   //Data input: This invokes the d3.csv request and the function points to the data file "opendata.csv" that will be loaded
   d3.csv("opendata.csv", function (error, data) { //with the file requested, the script carries out a function on the data (which is now called 'data')
     if (error) throw error;
 
     //Data manipulation: so that data is in a form that d3.js can take
-    var dateFormat = d3.time.format('%m/%d/%Y');
-    var numberFormat = d3.format('.2f');
-
+    var dateFormat = d3.time.format('%d/%m/%Y');
+    var numberFormat2dp = d3.format('.2f');
+    //Parsing and filtering data (CLEANING PHASE)
+    data = data.filter(function(d) {
+      if(d["Check in Date"] == "#N/A"
+      || d["Check in Date"] == ""
+      || d.Volume == ""
+      || d.Gross == ""
+      || d.LoadFill == ""
+      || d["Std KG"] == ""
+      || d["Temp. Condition"] == ""
+      || d.Scope == ""
+      || d.MoT == "") {
+        return false;
+      }
+        return true;
+    });
     //Mainly for data type coversion
     data.forEach(function(d) { //for each group within the 'data' array, do the following
-      d.Vol = + d.Vol; //sets the 'Vol' values in 'data' to numeric values if it isn't already by using the '+' operator
-      d.Weight = +d.Weight; //sets the 'Weight' values in 'data' to numeric values if it isn't already by using the '+' operator
-      d.LF = +d.LF;
-      d.TS = +d.TS;
+      d.Vol = + numberFormat2dp(d.Volume/1000000); //sets the 'Vol' values in 'data' to numeric values if it isn't already by using the '+' operator
+      d.Weight = + numberFormat2dp(d.Gross/1000); //sets the 'Weight' values in 'data' to numeric values if it isn't already by using the '+' operator
+      d.LF = + numberFormat2dp(d.LoadFill);
+      d.TS = +numberFormat2dp(d["Std KG"]/1000);
       d["Check in Date"] = dateFormat.parse(d["Check in Date"]);
       d["Check in Date"].setFullYear(2000 + d["Check in Date"].getFullYear());
     });
-
 //Initiate Crossfilter instance
     var dat = crossfilter(data);
     var all = dat.groupAll();
@@ -669,7 +683,7 @@ $( "dateSelect" ).data( dateFormat(maxDate) + dateFormat(minDate) );
         "MoT",
         {
           label: "Check in Date",
-          format: function (d) { return numberFormat(d.LoadFill);}
+          format: function (d) { return numberFormat2dp(d.LoadFill);}
         },
       ]);
 
