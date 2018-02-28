@@ -21,6 +21,11 @@
   var boxDayTSChart = dc.boxPlot("#boxDayTSChart");
   var boxMonthTSChart = dc.boxPlot("#boxMonthTSChart");
 
+  //Section 3 Charts
+  var beforeDayTSChart = dc.boxPlot("#beforeDayTSChart");
+  var beforeMonthTSChart = dc.boxPlot("#beforeMonthTSChart");
+  var afterDayTSChart = dc.boxPlot("#afterDayTSChart");
+  var afterMonthTSChart = dc.boxPlot("#afterMonthTSChart");
 
   //Data input: This invokes the d3.csv request and the function points to the data file "opendata.csv" that will be loaded
   d3.csv("opendata.csv", function (error, data) { //with the file requested, the script carries out a function on the data (which is now called 'data')
@@ -48,14 +53,18 @@
     });
     //Mainly for data type coversion
     data.forEach(function(d) { //for each group within the 'data' array, do the following
+
       d.Vol = +numberFormat(d.Volume/1000000); //sets the 'Vol' values in 'data' to numeric values if it isn't already by using the '+' operator
       d.Weight = +numberFormat(d.Gross/1000); //sets the 'Weight' values in 'data' to numeric values if it isn't already by using the '+' operator
       d.LF = +numberFormat(d.LoadFill);
       d.TS = +numberFormat(d["Std KG"]/1000);
+      d["New TWeight"] = +numberFormat(d["New TWeight"]/1000);
+      d["New LF"] = +numberFormat(d["New LF"]);
+
       d["Check in Date"] = dateFormat.parse(d["Check in Date"]);
       d["Check in Date"].setFullYear(2000 + d["Check in Date"].getFullYear());
       d.BaseCost = +numberFormat(d.BaseCost/1000000);
-      
+
     });
 //Initiate Crossfilter instance
     var dat = crossfilter(data);
@@ -134,6 +143,32 @@
       },
       function(p,v) {
         p.splice(p.indexOf(v.TS), 1);
+        return p;
+      },
+      function() {
+        return [];
+      }
+    );
+    var boxDayNTSGroup = boxDayDim.group().reduce(  //for new truck size in tonage
+      function(p,v) {
+        p.push(v["New TWeight"]);
+        return p;
+      },
+      function(p,v) {
+        p.splice(p.indexOf(v["New TWeight"]), 1);
+        return p;
+      },
+      function() {
+        return [];
+      }
+    );
+    var boxMonthNTSGroup = boxMonthDim.group().reduce(  //for new truck size in tonnage
+      function(p,v) {
+        p.push(v["New TWeight"]);
+        return p;
+      },
+      function(p,v) {
+        p.splice(p.indexOf(v["New TWeight"]), 1);
         return p;
       },
       function() {
@@ -350,6 +385,7 @@ function checkTimeEqual(array, attr, value) {
 //Miscellaneous
 document.getElementById("dateRange").innerHTML = 'Date Range: ' + dateFormat(minDate) + ' to ' + dateFormat(maxDate);
 $( "dateSelect" ).data( dateFormat(maxDate) + dateFormat(minDate) );
+document.getElementById("monotest").innerHTML = 5;
 
 //Charts
     transportScopeChart
@@ -656,6 +692,58 @@ $( "dateSelect" ).data( dateFormat(maxDate) + dateFormat(minDate) );
         .dimension(boxMonthDim)
         .group(boxMonthTSGroup)
         .ordinalColors(['#9ecae1'])
+        .x(d3.scale.ordinal().domain(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']))
+        .yAxisLabel("Truck Size (t)")
+        .elasticY(true)
+        .yAxisPadding("5%")
+        .filter = function() {};
+
+      beforeDayTSChart
+        .width(450)
+        .height(300)
+        .margins({top: 10, right: 50, bottom: 30, left: 30})
+        .dimension(boxDayDim)
+        .group(boxDayTSGroup)
+        .ordinalColors(['#9ecae1'])
+        .x(d3.scale.ordinal().domain(["Mon", "Tue", "Wed", "Thu","Fri","Sat","Sun"]))
+        .yAxisLabel("Truck Size (t)")
+        .elasticY(true)
+        .yAxisPadding("5%")
+        .filter = function() {};
+
+      beforeMonthTSChart
+        .width(850)
+        .height(300)
+        .margins({top: 10, right: 50, bottom: 30, left: 30})
+        .dimension(boxMonthDim)
+        .group(boxMonthTSGroup)
+        .ordinalColors(['#9ecae1'])
+        .x(d3.scale.ordinal().domain(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']))
+        .yAxisLabel("Truck Size (t)")
+        .elasticY(true)
+        .yAxisPadding("5%")
+        .filter = function() {};
+
+      afterDayTSChart
+        .width(450)
+        .height(300)
+        .margins({top: 10, right: 50, bottom: 30, left: 30})
+        .dimension(boxDayDim)
+        .group(boxDayNTSGroup)
+        .ordinalColors(['#00cc00'])
+        .x(d3.scale.ordinal().domain(["Mon", "Tue", "Wed", "Thu","Fri","Sat","Sun"]))
+        .yAxisLabel("Truck Size (t)")
+        .elasticY(true)
+        .yAxisPadding("5%")
+        .filter = function() {};
+
+      afterMonthTSChart
+        .width(850)
+        .height(300)
+        .margins({top: 10, right: 50, bottom: 30, left: 30})
+        .dimension(boxMonthDim)
+        .group(boxMonthNTSGroup)
+        .ordinalColors(['#00cc00'])
         .x(d3.scale.ordinal().domain(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']))
         .yAxisLabel("Truck Size (t)")
         .elasticY(true)
