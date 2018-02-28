@@ -28,7 +28,7 @@
 
     //Data manipulation: so that data is in a form that d3.js can take
     var dateFormat = d3.time.format('%d/%m/%Y');
-    var numberFormat2dp = d3.format('.2f');
+    var numberFormat = d3.format('.2f');
     //Parsing and filtering data (CLEANING PHASE)
     data = data.filter(function(d) {
       if(d["Check in Date"] == "#N/A"
@@ -39,19 +39,23 @@
       || d["Std KG"] == ""
       || d["Temp. Condition"] == ""
       || d.Scope == ""
-      || d.MoT == "") {
+      || d.MoT == ""
+      || d.BaseCost == ""
+      || d.ST == "") {
         return false;
       }
         return true;
     });
     //Mainly for data type coversion
     data.forEach(function(d) { //for each group within the 'data' array, do the following
-      d.Vol = + numberFormat2dp(d.Volume/1000000); //sets the 'Vol' values in 'data' to numeric values if it isn't already by using the '+' operator
-      d.Weight = + numberFormat2dp(d.Gross/1000); //sets the 'Weight' values in 'data' to numeric values if it isn't already by using the '+' operator
-      d.LF = + numberFormat2dp(d.LoadFill);
-      d.TS = +numberFormat2dp(d["Std KG"]/1000);
+      d.Vol = +numberFormat(d.Volume/1000000); //sets the 'Vol' values in 'data' to numeric values if it isn't already by using the '+' operator
+      d.Weight = +numberFormat(d.Gross/1000); //sets the 'Weight' values in 'data' to numeric values if it isn't already by using the '+' operator
+      d.LF = +numberFormat(d.LoadFill);
+      d.TS = +numberFormat(d["Std KG"]/1000);
       d["Check in Date"] = dateFormat.parse(d["Check in Date"]);
       d["Check in Date"].setFullYear(2000 + d["Check in Date"].getFullYear());
+      d.BaseCost = +numberFormat(d.BaseCost/1000000);
+      
     });
 //Initiate Crossfilter instance
     var dat = crossfilter(data);
@@ -682,8 +686,8 @@ $( "dateSelect" ).data( dateFormat(maxDate) + dateFormat(minDate) );
         "Temp. Condition",
         "MoT",
         {
-          label: "Check in Date",
-          format: function (d) { return numberFormat2dp(d.LoadFill);}
+          label: "Load Fill",
+          format: function (d) { return numberFormat(d.LoadFill);}
         },
       ]);
 
