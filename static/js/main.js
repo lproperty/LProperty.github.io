@@ -60,7 +60,6 @@
       d.TS = +numberFormat(d["Std KG"]/1000);
       d["New TWeight"] = +numberFormat(d["New TWeight"]/1000);
       d["New LF"] = +numberFormat(d["New LF"]);
-
       d["Check in Date"] = dateFormat.parse(d["Check in Date"]);
       d["Check in Date"].setFullYear(2000 + d["Check in Date"].getFullYear());
       d.BaseCost = +numberFormat(d.BaseCost/1000000);
