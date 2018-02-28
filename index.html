@@ -209,12 +209,7 @@
             Testing
           </div>
           <div class="chart-stage">
-            <div id="monthOfYearChart">
-              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
-              <a class="reset" href="javascript:monthOfYearChart.filterAll();dc.redrawAll();"
-                 style="display: none;">reset</a>
-              <div class="clearfix"></div>
-            </div>
+            <div id="monotest"></div>
           </div>
           <!-- <div class="chart-notes">
             Notes about this chart
@@ -490,7 +485,85 @@
 <div class="tab-pane fade" id="section3">
 <div class="container-fluid">
   <div class="filler"></div>
-<!-- EDIT HERE -->
+    <!-- 1st row -->
+    <div class="row">
+      <div class="col-md-4">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            (Before) Daily Truck Size Profile
+          </div>
+          <div class="chart-stage">
+            <div id="beforeDayTSChart">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:boxDayTSChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="chart-notes">
+            <!--• Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4-->
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            (Before) Monthly Truck Size Profile
+          </div>
+          <div class="chart-stage">
+            <div id="beforeMonthTSChart">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:boxMonthTSChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="chart-notes">
+            <!--• Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4-->
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- 2nd row -->
+  <div class="row">
+    <div class="col-md-4">
+      <div class="chart-wrapper">
+        <div class="chart-title">
+          (After) Daily Truck Size Profile
+        </div>
+        <div class="chart-stage">
+          <div id="afterDayTSChart">
+            <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+            <a class="reset" href="javascript:boxDayTSChart.filterAll();dc.redrawAll();"
+               style="display: none;">reset</a>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <div class="chart-notes">
+          <!--• Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4-->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="chart-wrapper">
+        <div class="chart-title">
+          (After) Monthly Truck Size Profile
+        </div>
+        <div class="chart-stage">
+          <div id="afterMonthTSChart">
+            <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+            <a class="reset" href="javascript:boxMonthTSChart.filterAll();dc.redrawAll();"
+               style="display: none;">reset</a>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <div class="chart-notes">
+          <!--• Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4-->
+        </div>
+      </div>
+  </div>
+</div>
 </div>
 </div>
 
