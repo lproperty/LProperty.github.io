@@ -4,6 +4,7 @@
   var transportScopeChart = dc.pieChart("#transportScope");
   var visCount = dc.dataCount(".dc-data-count");
   var visTable = dc.dataTable(".dc-data-table");
+  var CSTable = dc.dataTable(".CSTable");
   var dayOfWeekChart = dc.rowChart('#dayOfWeekProfile');
   var quarterChart = dc.pieChart('#quarterProfile');
   var timeChart = dc.barChart("#timeChart");
@@ -21,24 +22,50 @@
   var boxDayTSChart = dc.boxPlot("#boxDayTSChart");
   var boxMonthTSChart = dc.boxPlot("#boxMonthTSChart");
 
+  //Section 3 Charts
+  var beforeDayTSChart = dc.boxPlot("#beforeDayTSChart");
+  var beforeMonthTSChart = dc.boxPlot("#beforeMonthTSChart");
+  var afterDayTSChart = dc.boxPlot("#afterDayTSChart");
+  var afterMonthTSChart = dc.boxPlot("#afterMonthTSChart");
+
   //Data input: This invokes the d3.csv request and the function points to the data file "opendata.csv" that will be loaded
   d3.csv("opendata.csv", function (error, data) { //with the file requested, the script carries out a function on the data (which is now called 'data')
     if (error) throw error;
 
     //Data manipulation: so that data is in a form that d3.js can take
-    var dateFormat = d3.time.format('%m/%d/%Y');
+    var dateFormat = d3.time.format('%d/%m/%Y');
     var numberFormat = d3.format('.2f');
-
+    //Parsing and filtering data (CLEANING PHASE)
+    data = data.filter(function(d) {
+      if(d["Check in Date"] == "#N/A"
+      || d["Check in Date"] == ""
+      || d.Volume == ""
+      || d.Gross == ""
+      || d.LoadFill == ""
+      || d["Std KG"] == ""
+      || d["Temp. Condition"] == ""
+      || d.Scope == ""
+      || d.MoT == ""
+      || d.BaseCost == ""
+      || d.ST == "") {
+        return false;
+      }
+        return true;
+    });
     //Mainly for data type coversion
     data.forEach(function(d) { //for each group within the 'data' array, do the following
-      d.Vol = + d.Vol; //sets the 'Vol' values in 'data' to numeric values if it isn't already by using the '+' operator
-      d.Weight = +d.Weight; //sets the 'Weight' values in 'data' to numeric values if it isn't already by using the '+' operator
-      d.LF = +d.LF;
-      d.TS = +d.TS;
+
+      d.Vol = +numberFormat(d.Volume/1000000); //sets the 'Vol' values in 'data' to numeric values if it isn't already by using the '+' operator
+      d.Weight = +numberFormat(d.Gross/1000); //sets the 'Weight' values in 'data' to numeric values if it isn't already by using the '+' operator
+      d.LF = +numberFormat(d.LoadFill);
+      d.TS = +numberFormat(d["Std KG"]/1000);
+      d["New TWeight"] = +numberFormat(d["New TWeight"]/1000);
+      d["New LF"] = +numberFormat(d["New LF"]);
       d["Check in Date"] = dateFormat.parse(d["Check in Date"]);
       d["Check in Date"].setFullYear(2000 + d["Check in Date"].getFullYear());
-    });
+      d.BaseCost = +numberFormat(d.BaseCost/1000000);
 
+    });
 //Initiate Crossfilter instance
     var dat = crossfilter(data);
     var all = dat.groupAll();
@@ -116,6 +143,32 @@
       },
       function(p,v) {
         p.splice(p.indexOf(v.TS), 1);
+        return p;
+      },
+      function() {
+        return [];
+      }
+    );
+    var boxDayNTSGroup = boxDayDim.group().reduce(  //for new truck size in tonage
+      function(p,v) {
+        p.push(v["New TWeight"]);
+        return p;
+      },
+      function(p,v) {
+        p.splice(p.indexOf(v["New TWeight"]), 1);
+        return p;
+      },
+      function() {
+        return [];
+      }
+    );
+    var boxMonthNTSGroup = boxMonthDim.group().reduce(  //for new truck size in tonnage
+      function(p,v) {
+        p.push(v["New TWeight"]);
+        return p;
+      },
+      function(p,v) {
+        p.splice(p.indexOf(v["New TWeight"]), 1);
         return p;
       },
       function() {
@@ -332,6 +385,7 @@ function checkTimeEqual(array, attr, value) {
 //Miscellaneous
 document.getElementById("dateRange").innerHTML = 'Date Range: ' + dateFormat(minDate) + ' to ' + dateFormat(maxDate);
 $( "dateSelect" ).data( dateFormat(maxDate) + dateFormat(minDate) );
+document.getElementById("monotest").innerHTML = 5;
 
 //Charts
     transportScopeChart
@@ -644,6 +698,58 @@ $( "dateSelect" ).data( dateFormat(maxDate) + dateFormat(minDate) );
         .yAxisPadding("5%")
         .filter = function() {};
 
+      beforeDayTSChart
+        .width(450)
+        .height(300)
+        .margins({top: 10, right: 50, bottom: 30, left: 30})
+        .dimension(boxDayDim)
+        .group(boxDayTSGroup)
+        .ordinalColors(['#9ecae1'])
+        .x(d3.scale.ordinal().domain(["Mon", "Tue", "Wed", "Thu","Fri","Sat","Sun"]))
+        .yAxisLabel("Truck Size (t)")
+        .elasticY(true)
+        .yAxisPadding("5%")
+        .filter = function() {};
+
+      beforeMonthTSChart
+        .width(850)
+        .height(300)
+        .margins({top: 10, right: 50, bottom: 30, left: 30})
+        .dimension(boxMonthDim)
+        .group(boxMonthTSGroup)
+        .ordinalColors(['#9ecae1'])
+        .x(d3.scale.ordinal().domain(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']))
+        .yAxisLabel("Truck Size (t)")
+        .elasticY(true)
+        .yAxisPadding("5%")
+        .filter = function() {};
+
+      afterDayTSChart
+        .width(450)
+        .height(300)
+        .margins({top: 10, right: 50, bottom: 30, left: 30})
+        .dimension(boxDayDim)
+        .group(boxDayNTSGroup)
+        .ordinalColors(['#00cc00'])
+        .x(d3.scale.ordinal().domain(["Mon", "Tue", "Wed", "Thu","Fri","Sat","Sun"]))
+        .yAxisLabel("Truck Size (t)")
+        .elasticY(true)
+        .yAxisPadding("5%")
+        .filter = function() {};
+
+      afterMonthTSChart
+        .width(850)
+        .height(300)
+        .margins({top: 10, right: 50, bottom: 30, left: 30})
+        .dimension(boxMonthDim)
+        .group(boxMonthNTSGroup)
+        .ordinalColors(['#00cc00'])
+        .x(d3.scale.ordinal().domain(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']))
+        .yAxisLabel("Truck Size (t)")
+        .elasticY(true)
+        .yAxisPadding("5%")
+        .filter = function() {};
+
 //Table
     visCount
       .dimension(dat)
@@ -668,9 +774,44 @@ $( "dateSelect" ).data( dateFormat(maxDate) + dateFormat(minDate) );
         "Temp. Condition",
         "MoT",
         {
-          label: "Check in Date",
+          label: "Load Fill",
           format: function (d) { return numberFormat(d.LoadFill);}
         },
+      ]);
+
+    CSTable
+      .dimension(checkInDateDim)
+      // Data table does not use crossfilter group but rather a closure
+      // as a grouping function
+      .group(function (d) {
+          var format = d3.format("02d");
+          if(d.Savings > 0 ) {
+            return "Potential Savings - " + d["Check in Date"].getFullYear() + "/" + format((d["Check in Date"].getMonth() + 1));
+          }
+          return "Unchanged Shipments";
+      })
+      .size(200)
+      .columns([
+        {
+          label: "Check in Date",
+          format: function (d) { return dateFormat(d["Check in Date"]);}
+        },
+        "Shipment",
+        "Route",
+        {
+          label: "Old Transport Type",
+          format: function (d) {return d.ST;}
+        },
+        {
+          label: "New Transport Type",
+          format: function (d) {return d["New SH"];}
+        },
+        {
+          label: "Savings",
+          format: function (d) {
+            var format = d3.format(".0f");
+            return format(d.Savings);}
+        }
       ]);
 
     dc.renderAll();
