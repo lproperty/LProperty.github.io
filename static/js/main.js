@@ -4,6 +4,7 @@
   var transportScopeChart = dc.pieChart("#transportScope");
   var visCount = dc.dataCount(".dc-data-count");
   var visTable = dc.dataTable(".dc-data-table");
+  var CSTable = dc.dataTable(".CSTable");
   var dayOfWeekChart = dc.rowChart('#dayOfWeekProfile');
   var quarterChart = dc.pieChart('#quarterProfile');
   var timeChart = dc.barChart("#timeChart");
@@ -776,6 +777,41 @@ document.getElementById("monotest").innerHTML = 5;
           label: "Load Fill",
           format: function (d) { return numberFormat(d.LoadFill);}
         },
+      ]);
+
+    CSTable
+      .dimension(checkInDateDim)
+      // Data table does not use crossfilter group but rather a closure
+      // as a grouping function
+      .group(function (d) {
+          var format = d3.format("02d");
+          if(d.Savings > 0 ) {
+            return "Potential Savings - " + d["Check in Date"].getFullYear() + "/" + format((d["Check in Date"].getMonth() + 1));
+          }
+          return "Unchanged Shipments";
+      })
+      .size(200)
+      .columns([
+        {
+          label: "Check in Date",
+          format: function (d) { return dateFormat(d["Check in Date"]);}
+        },
+        "Shipment",
+        "Route",
+        {
+          label: "Old Transport Type",
+          format: function (d) {return d.ST;}
+        },
+        {
+          label: "New Transport Type",
+          format: function (d) {return d["New SH"];}
+        },
+        {
+          label: "Savings",
+          format: function (d) {
+            var format = d3.format(".0f");
+            return format(d.Savings);}
+        }
       ]);
 
     dc.renderAll();
