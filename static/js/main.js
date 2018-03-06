@@ -763,7 +763,7 @@ document.getElementById("monotest").innerHTML = 5;
           var format = d3.format("02d");
           return d["Check in Date"].getFullYear() + "/" + format((d["Check in Date"].getMonth() + 1));
       })
-      .size(100)
+      .size(200)
       .columns([
         {
           label: "Check in Date",
@@ -812,7 +812,11 @@ document.getElementById("monotest").innerHTML = 5;
             var format = d3.format(".0f");
             return format(d.Savings);}
         }
-      ]);
+      ])
+      .sortBy(function(d){
+          return d.Savings;
+        })
+      .order(d3.descending); //ordering 
 
     dc.renderAll();
   });
