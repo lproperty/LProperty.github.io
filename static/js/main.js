@@ -28,6 +28,40 @@
   var afterDayTSChart = dc.boxPlot("#afterDayTSChart");
   var afterMonthTSChart = dc.boxPlot("#afterMonthTSChart");
 
+  d3.csv("m1consolidated.csv", function (error, data){
+    if (error) throw error;
+
+    var numberFormat = d3.format('.2r');
+
+    data.forEach(function(d) { //for each group within the 'data' array, do the following
+      d.Index = +numberFormat(d.Index);
+    });
+
+    //Inititae crossfilter instance
+    var matrix = crossfilter(data);
+
+    var savingsIndex = matrix.dimension(function (d) { return d.Index;});
+
+    CSTable
+      .dimension(savingsIndex)
+      .group(function (d) {return "";})
+      .size(150)
+      .columns([
+        "Index",
+        "Old Truck Type Description",
+        "Old Truck Type",
+        "New Truck Type Description",
+        "New Truck Type",
+        "Count",
+        "Savings",
+      ])
+      .sortBy(function (d) {return d.Index;})
+      .order(d3.ascending);
+
+      dc.renderAll;
+
+  });
+
   //Data input: This invokes the d3.csv request and the function points to the data file "opendata.csv" that will be loaded
   d3.csv("opendata.csv", function (error, data) { //with the file requested, the script carries out a function on the data (which is now called 'data')
     if (error) throw error;
@@ -778,45 +812,6 @@ document.getElementById("monotest").innerHTML = 5;
           format: function (d) { return numberFormat(d.LoadFill);}
         },
       ]);
-
-    CSTable
-      .dimension(checkInDateDim)
-      // Data table does not use crossfilter group but rather a closure
-      // as a grouping function
-      .group(function (d) {
-          var format = d3.format("02d");
-          if(d.Savings > 0 ) {
-            return "Potential Savings - " + d["Check in Date"].getFullYear() + "/" + format((d["Check in Date"].getMonth() + 1));
-          }
-          return "Unchanged Shipments";
-      })
-      .size(200)
-      .columns([
-        {
-          label: "Check in Date",
-          format: function (d) { return dateFormat(d["Check in Date"]);}
-        },
-        "Shipment",
-        "Route",
-        {
-          label: "Old Transport Type",
-          format: function (d) {return d.ST;}
-        },
-        {
-          label: "New Transport Type",
-          format: function (d) {return d["New SH"];}
-        },
-        {
-          label: "Savings",
-          format: function (d) {
-            var format = d3.format(".0f");
-            return format(d.Savings);}
-        }
-      ])
-      .sortBy(function(d){
-          return d.Savings;
-        })
-      .order(d3.descending); //ordering 
 
     dc.renderAll();
   });
