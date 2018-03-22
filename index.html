@@ -63,8 +63,18 @@
         Please click on the charts to select your data range.
         If charts did not load, please review the raw csv file to ensure it follows the naming requirements.
     </p>
+    <input type="file" accept=".csv" id="uploader" />
+    <button type="button" onclick="appRestart()">Restart App</button>
 </div>
 
+    <script>
+      function appRestart() {
+        // var fs = require('fs');
+        const remote = require('electron').remote;
+        remote.app.relaunch();
+        remote.app.exit();
+      }
+    </script>
 
     <div class="row">
       <!--Contains block elements in the first row-->
@@ -632,6 +642,8 @@
 <script src="./static/lib/js/bootstrap-datepicker.js"></script>
 
 <script>if (window.module) module = window.module;</script>
+
+<script>upload_button("uploader", load_dataset);</script>
 
 </body>
 </html>
