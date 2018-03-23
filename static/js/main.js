@@ -62,9 +62,8 @@
 
   });
 
+function renderCharts(data){
   //Data input: This invokes the d3.csv request and the function points to the data file "opendata.csv" that will be loaded
-  d3.csv("opendata.csv", function (error, data) { //with the file requested, the script carries out a function on the data (which is now called 'data')
-    if (error) throw error;
 
     //Data manipulation: so that data is in a form that d3.js can take
     var dateFormat = d3.time.format('%d/%m/%Y');
@@ -814,4 +813,29 @@ document.getElementById("monotest").innerHTML = 5;
       ]);
 
     dc.renderAll();
-  });
+};
+
+//--------------------------------------------------------------------
+
+//local csv and renders all charts
+function load_dataset(csv) {
+  var data = d3.csv.parse(csv);
+  renderCharts(data);
+}
+// handle upload button
+function upload_button(el, callback) {
+  var uploader = document.getElementById(el);
+  var reader = new FileReader();
+
+  reader.onload = function(e) {
+    var contents = e.target.result;
+    callback(contents);
+  };
+
+  uploader.addEventListener("change", handleFiles, false);
+
+  function handleFiles() {
+    var file = this.files[0];
+    reader.readAsText(file);
+  };
+};
