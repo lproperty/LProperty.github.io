@@ -45,8 +45,6 @@
               href="javascript:dc.filterAll(); dc.renderAll();">Reset All</a>
       </div>
   </div>
-
-
 </div>
 
 
@@ -63,8 +61,9 @@
         Please click on the charts to select your data range.
         If charts did not load, please review the raw csv file to ensure it follows the naming requirements.
     </p>
-    <input type="file" accept=".csv" id="uploader" />
-    <!-- <button type="button" onclick="appRestart()">Restart App</button> -->
+    <label class="btn btn-primary input-button">
+    CHANGE DATA FILE <input type="file" accept=".csv" id="uploader" hidden>
+    </label>
 </div>
 
 

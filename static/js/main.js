@@ -59,7 +59,6 @@
       .order(d3.ascending);
 
       dc.renderAll;
-
   });
 
 function renderCharts(data){

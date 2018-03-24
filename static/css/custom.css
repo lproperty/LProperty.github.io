@@ -1,3 +1,11 @@
+ .input-button {
+   border: none;
+   text-align: center;
+ }
+  #uploader {
+    display: none !important;
+  }
+
 /* Chart CSS */
   .dc-chart g.box text {
     font-size: 7px;
