@@ -807,7 +807,7 @@ document.getElementById("monotest").innerHTML = 5;
       .size(200)
       .on('renderlet',function (d) {
         d3.select("#TotalCases").text(sumValue(casesGroup.all()));
-        d3.select("#AvergeCostPerCase").text(sumValue(costsGroup.all()));
+        d3.select("#AvergeCostPerCase").text(sumValue(costsGroup.all()) / sumValue(casesGroup.all()) );
         d3.select("#TotalTons").text(sumValue(tonsGroup.all()));
         d3.select("#AvergeCostPerTon").text(sumValue(costsGroup.all()) / sumValue(tonsGroup.all()) );
         d3.select("#TotalMeter3").text(sumValue(meter3Group.all()));
