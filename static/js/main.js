@@ -28,6 +28,8 @@
   var afterDayTSChart = dc.boxPlot("#afterDayTSChart");
   var afterMonthTSChart = dc.boxPlot("#afterMonthTSChart");
 
+  var test;
+
   d3.csv("m1consolidated.csv", function (error, data){
     if (error) throw error;
 
@@ -62,7 +64,6 @@
   });
 
 function renderCharts(data){
-  //Data input: This invokes the d3.csv request and the function points to the data file "opendata.csv" that will be loaded
 
     //Data manipulation: so that data is in a form that d3.js can take
     var dateFormat = d3.time.format('%d/%m/%Y');
@@ -79,6 +80,7 @@ function renderCharts(data){
       || d.Scope == ""
       || d.MoT == ""
       || d.BaseCost == ""
+      || d["Dlv.qty"] == ""
       || d.ST == "") {
         return false;
       }
@@ -91,6 +93,7 @@ function renderCharts(data){
       d.Weight = +numberFormat(d.Gross/1000); //sets the 'Weight' values in 'data' to numeric values if it isn't already by using the '+' operator
       d.LF = +numberFormat(d.LoadFill);
       d.TS = +numberFormat(d["Std KG"]/1000);
+      d["Dlv.qty"] = +numberFormat(d["Dlv.qty"]);
       d["New TWeight"] = +numberFormat(d["New TWeight"]/1000);
       d["New LF"] = +numberFormat(d["New LF"]);
       d["Check in Date"] = dateFormat.parse(d["Check in Date"]);
@@ -787,6 +790,12 @@ document.getElementById("monotest").innerHTML = 5;
       .dimension(dat)
       .group(all);
 
+
+    var casesGroup = checkInDateDim.group().reduceSum(function(d){return d["Dlv.qty"]});
+    var costsGroup = checkInDateDim.group().reduceSum(function(d){return d.BaseCost});
+    var tonsGroup = checkInDateDim.group().reduceSum(function(d){return d.Weight});
+    var meter3Group = checkInDateDim.group().reduceSum(function(d){return d.Vol});
+
     visTable
       .dimension(checkInDateDim)
       // Data table does not use crossfilter group but rather a closure
@@ -796,6 +805,15 @@ document.getElementById("monotest").innerHTML = 5;
           return d["Check in Date"].getFullYear() + "/" + format((d["Check in Date"].getMonth() + 1));
       })
       .size(200)
+      .on('renderlet',function (d) {
+        d3.select("#TotalCases").text(sumValue(casesGroup.all()));
+        d3.select("#AvergeCostPerCase").text(sumValue(costsGroup.all()));
+        d3.select("#TotalTons").text(sumValue(tonsGroup.all()));
+        d3.select("#AvergeCostPerTon").text(sumValue(costsGroup.all()) / sumValue(tonsGroup.all()) );
+        d3.select("#TotalMeter3").text(sumValue(meter3Group.all()));
+
+        return;
+      })
       .columns([
         {
           label: "Check in Date",
@@ -803,6 +821,7 @@ document.getElementById("monotest").innerHTML = 5;
         },
         "Shipment",
         "Plnt",
+        "Dlv.qty",
         "Temp. Condition",
         "MoT",
         {
@@ -815,7 +834,13 @@ document.getElementById("monotest").innerHTML = 5;
 };
 
 //--------------------------------------------------------------------
-
+function sumValue(d) {
+  var value = 0;
+  d.forEach(function(p) {
+    value +=p.value;
+  });
+  return value;
+};
 //local csv and renders all charts
 function load_dataset(csv) {
   var data = d3.csv.parse(csv);
