@@ -34,8 +34,9 @@
     <ul class="nav nav-pills" role="tablist">
       <li class="active"><a href="#section1" role="tab" data-toggle="tab">Criteria Selection</a></li>
       <li><a href="#section2" role="tab" data-toggle="tab">Charts & Graphs</a></li>
-      <li><a href="#section3" role="tab" data-toggle="tab">Cost Savings</a></li>
-      <li><a href="#section4" role="tab" data-toggle="tab">Data Table</a></li>
+      <li><a href="#section3" role="tab" data-toggle="tab">Truck Downsizing</a></li>
+      <li><a href="#section4" role="tab" data-toggle="tab">Truck Consolidation</a></li>
+      <li><a href="#section5" role="tab" data-toggle="tab">Data Table</a></li>
     </ul>
   </div>
   <div class="dc-data-count col-md-4">
@@ -65,7 +66,6 @@
     CHANGE DATA FILE <input type="file" accept=".csv" id="uploader" hidden>
     </label>
 </div>
-
 
     <div class="row">
       <!--Contains block elements in the first row-->
@@ -208,17 +208,7 @@
     <div class="row">
       <!--Contains block elements in the first row-->
       <div class="col-md-3">
-        <div class="chart-wrapper">
-          <div class="chart-title">
-            Testing
-          </div>
-          <div class="chart-stage">
-            <div id="monotest"></div>
-          </div>
-          <!-- <div class="chart-notes">
-            Notes about this chart
-          </div> -->
-        </div>
+        <div class="chart-wrapper"></div>
       </div>
 
       <div class="col-md-9">
@@ -230,41 +220,29 @@
             <thead>
               <tr>
                 <th scope="col"></th>
-                <th scope="col">Original Set</th>
                 <th scope="col">Criterion Set</th>
-                <th scope="col">Percentage Difference</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <th scope="row">Total Cases Transported</th>
-                <td id="TotalCases"> 1,050,577 </td>
-                <td > 1,008,169 </td>
-                <td > -4.04% </td>
+                <td id="TotalCases"></td>
               </tr>
               <tr>
                 <th scope="row">Average Cost per Case Transported</th>
-                <td id="AvergeCostPerCase"> $164,258.17 </td>
-                <td> $163,764.61 </td>
-                <td> -0.30% </td>
+                <td id="AvergeCostPerCase"></td>
               </tr>
               <tr>
                 <th scope="row">Total Tonnage Transported</th>
-                <td id="TotalTons"> 532,887.100 </td>
-                <td> 510,242.000 </td>
-                <td> -4.25% </td>
+                <td id="TotalTons"></td>
               </tr>
               <tr>
                 <th scope="row">Average Cost per Ton Transported³</th>
-                <td id="AvergeCostPerTon"> $323,831.93 </td>
-                <td> $323,576.66 </td>
-                <td>-0.08% </td>
+                <td id="AvergeCostPerTon"></td>
               </tr>
               <tr>
                 <th scope="row">Total Metre³ Transported</th>
-                <td id="TotalMeter3"> 49.983 </td>
-                <td> 47.747 </td>
-                <td> -4.47% </td>
+                <td id="TotalMeter3"></td>
               </tr>
             </tbody>
           </table>
@@ -491,13 +469,13 @@
   <div class="filler"></div>
     <!-- 1st row -->
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-5">
         <div class="chart-wrapper">
-          <div class="chart-title">
+          <!--<div class="chart-title">
             (Before) Daily Truck Size Profile
           </div>
           <div class="chart-stage">
-            <div id="beforeDayTSChart">
+            <div id="beforeDayTSlineChart">
               <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
               <a class="reset" href="javascript:boxDayTSChart.filterAll();dc.redrawAll();"
                  style="display: none;">reset</a>
@@ -505,17 +483,16 @@
             </div>
           </div>
           <div class="chart-notes">
-            <!--• Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4-->
+            • Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4-->
           </div>
         </div>
-      </div>
-      <div class="col-md-8">
+      <div class="col-md-7">
         <div class="chart-wrapper">
           <div class="chart-title">
-            (Before) Monthly Truck Size Profile
+            Cost Comparison Profiles
           </div>
           <div class="chart-stage">
-            <div id="beforeMonthTSChart">
+            <div id="costComparisonLineChart">
               <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
               <a class="reset" href="javascript:boxMonthTSChart.filterAll();dc.redrawAll();"
                  style="display: none;">reset</a>
@@ -531,13 +508,13 @@
 
   <!-- 2nd row -->
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-5">
       <div class="chart-wrapper">
         <div class="chart-title">
-          (After) Daily Truck Size Profile
+          Day-of-Week Truck Capacity Profile
         </div>
         <div class="chart-stage">
-          <div id="afterDayTSChart">
+          <div id="dayOfWeekTCChart">
             <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
             <a class="reset" href="javascript:boxDayTSChart.filterAll();dc.redrawAll();"
                style="display: none;">reset</a>
@@ -549,13 +526,14 @@
         </div>
       </div>
     </div>
-    <div class="col-md-8">
+
+    <div class="col-md-7">
       <div class="chart-wrapper">
         <div class="chart-title">
-          (After) Monthly Truck Size Profile
+          Month-of-Year Truck Capacity Profile
         </div>
         <div class="chart-stage">
-          <div id="afterMonthTSChart">
+          <div id="monthOfYearTCChart">
             <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
             <a class="reset" href="javascript:boxMonthTSChart.filterAll();dc.redrawAll();"
                style="display: none;">reset</a>
@@ -566,7 +544,7 @@
           <!--• Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4-->
         </div>
       </div>
-  </div>
+    </div>
 </div>
 
   <div class="row">
@@ -576,36 +554,32 @@
           Consolidated Savings by Truck Downsizing
         </div>
         <div class="chart-stage">
-          <table class="table table-hover CSTable">
-          </table>
+          <table class="table table-hover CSTable"></table>
         </div>
       </div>
     </div>
   </div>
+  </div>
 </div>
 
-</div>
-
-<!-- Table -->
-<div class="tab-pane fade" id="section4">
-<div class="container-fluid">
-  <div class="filler"></div>
-  <div class="row">
-    <div class="col-md-12">
-      <div class="chart-wrapper">
-        <div class="chart-title">
-          Data Table
-        </div>
-        <div class="chart-stage">
-          <table class="table table-hover dc-data-table">
-          </table>
+  <div class="tab-pane fade" id="section5">
+  <div class="container-fluid">
+    <div class="filler"></div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Data Table
+          </div>
+          <div class="chart-stage">
+            <table class="table table-hover dc-data-table">
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-</div>
-<!-- Table -->
+  </div>
 </div>
 
 <div class="container-fluid">
