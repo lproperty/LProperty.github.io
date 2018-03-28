@@ -1011,6 +1011,12 @@ $( "dateSelect" ).data( dateFormat(maxDate) + dateFormat(minDate) );
     var costsGroup = checkInDateDim.group().reduceSum(function(d){return d.BaseCost});
     var tonsGroup = checkInDateDim.group().reduceSum(function(d){return d.Weight});
     var meter3Group = checkInDateDim.group().reduceSum(function(d){return d.Vol});
+    var totalBCGroup = checkInDateDim.group().reduceSum(function(d){return d.BaseCost});
+    var totalNBCGroup = checkInDateDim.group().reduceSum(function(d){return d["New BC"]});
+
+    // var totalBCGroup = checkInDateDim.group().reduceSum(function(d){return d.BaseCost});
+
+
 
     visTable
       .dimension(checkInDateDim)
@@ -1022,11 +1028,35 @@ $( "dateSelect" ).data( dateFormat(maxDate) + dateFormat(minDate) );
       })
       .size(200)
       .on('renderlet',function (d) {
-        d3.select("#TotalCases").text(sumValue(casesGroup.all()));
-        d3.select("#AvergeCostPerCase").text(sumValue(costsGroup.all()) / sumValue(casesGroup.all()) );
-        d3.select("#TotalTons").text(sumValue(tonsGroup.all()));
-        d3.select("#AvergeCostPerTon").text(sumValue(costsGroup.all()) / sumValue(tonsGroup.all()) );
-        d3.select("#TotalMeter3").text(sumValue(meter3Group.all()));
+        var format = d3.format(",.4f");
+        var formatInteger = d3.format(",.0f");
+        var formatSF = d3.format(".4s");
+
+
+        var totalCases = formatInteger(sumValue(casesGroup.all()));
+        var averageCostPerCase = format(sumValue(costsGroup.all()) / sumValue(casesGroup.all()) );
+        var totalTons = formatInteger(sumValue(tonsGroup.all()));
+        var avergeCostPerTon = format(sumValue(costsGroup.all()) / sumValue(tonsGroup.all()) );
+        var totalMeter3 = formatInteger(sumValue(meter3Group.all()));
+        var totalBC = formatInteger(sumValue(totalBCGroup.all()));
+        var totalNBC = formatInteger(sumValue(totalNBCGroup.all()));
+        var averageCostPerCaseAfter = format(sumValue(totalNBCGroup.all()) / sumValue(casesGroup.all()) );
+        var avergeCostPerTonAfter = format(sumValue(totalNBCGroup.all()) / sumValue(tonsGroup.all()) );
+
+
+        d3.select("#TotalCases").text(totalCases);
+        d3.select("#AvergeCostPerCase").text(averageCostPerCase);
+        d3.select("#TotalTons").text(totalTons);
+        d3.select("#AvergeCostPerTon").text(avergeCostPerTon);
+        d3.select("#TotalMeter3").text(totalMeter3);
+        d3.select("#totalBC").text(totalBC);
+        d3.select("#totalNBC").text(totalNBC);
+        d3.select("#AvergeCostPerCaseBefore").text(averageCostPerCase);
+        d3.select("#AverageCostPerCaseAfter").text(averageCostPerCaseAfter);
+        d3.select("#AvergeCostPerTonBefore").text(avergeCostPerTon);
+        d3.select("#AvergeCostPerTonAfter").text(avergeCostPerTonAfter);
+
+
 
         return;
       })
