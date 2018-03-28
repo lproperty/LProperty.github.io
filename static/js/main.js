@@ -70,7 +70,7 @@
       dc.renderAll;
   });
 
-  d3.csv("Cost Saving Method 2 Deep Dive.csv", function (error, data){
+  d3.csv("Cost Saving Method 1 Deep Dive.csv", function (error, data){
     if (error) throw error;
 
     var dateFormat = d3.time.format('%d/%m/%Y');
@@ -1078,11 +1078,12 @@ $( "dateSelect" ).data( dateFormat(maxDate) + dateFormat(minDate) );
     var meter3Group = checkInDateDim.group().reduceSum(function(d){return d.Vol});
     var totalBCGroup = checkInDateDim.group().reduceSum(function(d){return d.BaseCost});
     var totalNBCGroup = checkInDateDim.group().reduceSum(function(d){return d["New BC"]});
+    var totalTonCapGroup = checkInDateDim.group().reduceSum(function(d){return d.TS});
+    var totalVolCapGroup = checkInDateDim.group().reduceSum(function(d){return d["Std M3"]});
+    var totalNewTonCapGroup = checkInDateDim.group().reduceSum(function(d){return d["New TWeight"]});
+    var totalNewVolCapGroup = checkInDateDim.group().reduceSum(function(d){return d["New TVol"]});
 
     // var totalBCGroup = checkInDateDim.group().reduceSum(function(d){return d.BaseCost});
-
-
-
     visTable
       .dimension(checkInDateDim)
       // Data table does not use crossfilter group but rather a closure
@@ -1107,6 +1108,15 @@ $( "dateSelect" ).data( dateFormat(maxDate) + dateFormat(minDate) );
         var totalNBC = formatInteger(sumValue(totalNBCGroup.all()));
         var averageCostPerCaseAfter = format(sumValue(totalNBCGroup.all()) / sumValue(casesGroup.all()) );
         var avergeCostPerTonAfter = format(sumValue(totalNBCGroup.all()) / sumValue(tonsGroup.all()) );
+        var avergeCostPerM3Before = format(sumValue(totalBCGroup.all()) / sumValue(meter3Group.all()) );
+        var avergeCostPerM3After = format(sumValue(totalNBCGroup.all()) / sumValue(meter3Group.all()) );
+
+        var avergeTonCapBefore = format(sumValue(totalTonCapGroup.all()) / all.value() );
+        var avergeTonCapAfter = format(sumValue(totalNewTonCapGroup.all()) / all.value() );
+
+        var avergeVolCapBefore = format(sumValue(totalVolCapGroup.all()) / sumValue(meter3Group.all()) );
+        var avergeVolCapAfter = format(sumValue(totalNewVolCapGroup.all()) / sumValue(meter3Group.all()) / 1000000);
+
 
 
         d3.select("#TotalCases").text(totalCases);
@@ -1121,7 +1131,14 @@ $( "dateSelect" ).data( dateFormat(maxDate) + dateFormat(minDate) );
         d3.select("#AvergeCostPerTonBefore").text(avergeCostPerTon);
         d3.select("#AvergeCostPerTonAfter").text(avergeCostPerTonAfter);
 
+        d3.select("#AvergeCostPerM3Before").text(avergeCostPerM3Before);
+        d3.select("#AvergeCostPerM3After").text(avergeCostPerM3After);
 
+        d3.select("#AvergeTonCapBefore").text(avergeTonCapBefore);
+        d3.select("#AvergeTonCapAfter").text(avergeTonCapAfter);
+
+        d3.select("#AvergeVolCapBefore").text(avergeVolCapBefore);
+        d3.select("#AvergeVolCapAfter").text(avergeVolCapAfter);
 
         return;
       })
