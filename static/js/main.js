@@ -70,10 +70,10 @@
       dc.renderAll;
   });
 
-  d3.csv("Cost Saving Method 1 Deep Dive.csv", function (error, data){
+  d3.csv("Cost Saving Method 2 Deep Dive.csv", function (error, data){
     if (error) throw error;
 
-    var dateFormat = d3.time.format('%d/%m/%Y');
+    var dateFormat = d3.time.format('%Y-%m-%d');
     var numberFormat1 = d3.format('.2f');
     var numberFormat = d3.format('.2r');
 
@@ -269,7 +269,7 @@ function renderCharts(data){
     var initialBasecostGroup = checkInDateDim.group().reduceSum(function(d){return d.BaseCost});
     var newTruckCostGroup = checkInDateDim.group().reduceSum(function(d){return d["New BC"]});
 
-    var lineDayTSGroup = boxDayDim.group().reduce(
+    var lineDayTSGroup = dayOfWeekDim.group().reduce(
       function(p, v){
         ++p.days;
         p.total += v.TS;
@@ -287,7 +287,7 @@ function renderCharts(data){
       }
     );
 
-    var lineDayTWGroup = boxDayDim.group().reduce(
+    var lineDayTWGroup = dayOfWeekDim.group().reduce(
       function(p, v){
         ++p.days;
         p.total += v["New TWeight"];
@@ -945,11 +945,7 @@ $( "dateSelect" ).data( dateFormat(maxDate) + dateFormat(minDate) );
         .height(300)
         .margins({top: 40, right: 40, bottom: 20, left: 30})
         .dimension(boxDayDim)
-        .x(d3.scale.ordinal().domain(boxDayDim.top(Infinity).map(function (d) {
-            var day = d["Check in Date"].getDay();
-            var name = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            return name[day];
-        })))
+        .x(d3.scale.ordinal().domain(['1.Mon', '2.Tue', '3.Wed', '4.Thu', '5.Fri', '6.Sat','7.Sun']))
         .xUnits(dc.units.ordinal)
         ._rangeBandPadding(1) //Super important!!!
         .compose([
