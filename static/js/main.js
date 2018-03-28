@@ -32,6 +32,7 @@
 
   //Section 4 charts
   var M2Table = dc.dataTable(".M2Table");
+  var visTable2 = dc.dataTable(".visTable2");
   var costComparisonLineChartM2 = dc.compositeChart("#costComparisonLineChartM2");
 
   //Section 5 charts
@@ -89,41 +90,87 @@
     var matrix = crossfilter(data);
 
     //dimensions
-    var checkInDateDim = matrix.dimension(function (d) { return d["Check in Date"]; });
-    // var boxDayDim = matrix.dimension(function (d) {
-    //     var day = d["Check in Date"].getDay();
-    //     var name = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    //     return name[day];
-    // });
-    // var boxMonthDim = matrix.dimension(function (d) {
-    //     var month = d["Check in Date"].getMonth();
-    //     var name = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    //     return name[month];
-    // });
+    var checkInDateDim2 = matrix.dimension(function (d) { return d["Check in Date"]; });
 
     //Metrics
-    var minDate = checkInDateDim.bottom(1)[0]["Check in Date"];
-    var maxDate = checkInDateDim.top(1)[0]["Check in Date"];
-    var initialBasecostGroup = checkInDateDim.group().reduceSum(function(d){return d.BaseCost});
-    var updatedBasecostGroup = checkInDateDim.group().reduceSum(function(d){return d["Updated Base Cost"]});
+    var minDate2 = checkInDateDim2.bottom(1)[0]["Check in Date"];
+    var maxDate2 = checkInDateDim2.top(1)[0]["Check in Date"];
+    var initialBasecostGroup2 = checkInDateDim2.group().reduceSum(function(d){return d.BaseCost});
+    var updatedBasecostGroup2 = checkInDateDim2.group().reduceSum(function(d){return d["Updated Base Cost"]});
+    var tonsGroup2 = checkInDateDim2.group().reduceSum(function(d){return d.Weight});
+    var meter3Group2 = checkInDateDim2.group().reduceSum(function(d){return d.Volume});
+    var oldNumTruckGroup2 = checkInDateDim2.group().reduceSum(function(d){return d.OldShipmentCount});
+    var newNumTruckGroup2 = checkInDateDim2.group().reduceSum(function(d){return d.NewShipmentCount});
+
+    visTable2
+      .dimension(checkInDateDim2)
+      // Data table does not use crossfilter group but rather a closure
+      // as a grouping function
+      .group(function (d) {
+          var format = d3.format("02d");
+          return d["Check in Date"].getFullYear() + "/" + format((d["Check in Date"].getMonth() + 1));
+      })
+      .size(200)
+      .on('renderlet',function (d) {
+        var format = d3.format(",.4f");
+        var formatInteger = d3.format(",.0f");
+        var formatSF = d3.format(".4s");
+
+        var totalTons = formatInteger(sumValue(tonsGroup2.all()));
+        var averageCostPerTonBefore = format(sumValue(initialBasecostGroup2.all()) / sumValue(tonsGroup2.all()) );
+        var averageCostPerTonAfter = format(sumValue(updatedBasecostGroup2.all()) / sumValue(tonsGroup2.all()) );
+        var totalBC = formatInteger(sumValue(initialBasecostGroup2.all()));
+        var totalNBC = formatInteger(sumValue(updatedBasecostGroup2.all()));
+        var averageCostPerM3Before = format(sumValue(initialBasecostGroup2.all()) / sumValue(meter3Group2.all()) );
+        var averageCostPerM3After = format(sumValue(updatedBasecostGroup2.all()) / sumValue(meter3Group2.all()) );
+        var totalTrucksBefore = formatInteger(sumValue(oldNumTruckGroup2.all()));
+        var totalTrucksAfter = formatInteger(sumValue(newNumTruckGroup2.all()));
+
+
+        d3.select("#totalBC2").text(totalBC);
+        d3.select("#totalNBC2").text(totalNBC);
+        d3.select("#AverageCostPerTonBefore2").text(averageCostPerTonBefore);
+        d3.select("#AverageCostPerTonAfter2").text(averageCostPerTonAfter);
+        d3.select("#AverageCostPerM3Before2").text(averageCostPerM3Before);
+        d3.select("#AverageCostPerM3After2").text(averageCostPerM3After);
+        d3.select("#numTrucksBefore").text(totalTrucksBefore);
+        d3.select("#numTrucksAfter").text(totalTrucksAfter);
+
+        return;
+      });
+      // .columns([
+      //   {
+      //     label: "Check in Date",
+      //     format: function (d) { return dateFormat(d["Check in Date"]);}
+      //   },
+      //   "Shipment",
+      //   "Plnt",
+      //   "Dlv.qty",
+      //   "Temp. Condition",
+      //   "MoT",
+      //   {
+      //     label: "Load Fill",
+      //     format: function (d) { return numberFormat(d.LoadFill);}
+      //   },
+      // ]);
 
     costComparisonLineChartM2
       .width(800)
       .height(300)
       .margins({top: 20, right: 0, bottom: 20, left: 50})
-      .dimension(checkInDateDim)
+      .dimension(checkInDateDim2)
       .compose([
       dc.lineChart(costComparisonLineChartM2)
-        .group(initialBasecostGroup, 'Before')
+        .group(initialBasecostGroup2, 'Before')
         .renderArea(true)
         .ordinalColors(['#699fce']),
       dc.lineChart(costComparisonLineChartM2)
-      .group(updatedBasecostGroup, 'After')
+      .group(updatedBasecostGroup2, 'After')
       .renderArea(true)
       .ordinalColors(['#1e384f'])
       ])
       .transitionDuration(500)
-      .x(d3.time.scale().domain([minDate, maxDate]))
+      .x(d3.time.scale().domain([minDate2, maxDate2]))
       .elasticY(true)
       .yAxisLabel("Currency Cost / million")
       .brushOn(false)
