@@ -32,6 +32,7 @@
 
   //Section 4 charts
   var M2Table = dc.dataTable(".M2Table");
+  var costComparisonLineChartM2 = dc.compositeChart("#costComparisonLineChartM2");
 
   //Section 5 charts
   var visTable = dc.dataTable(".dc-data-table");
@@ -65,6 +66,70 @@
       ])
       .sortBy(function (d) {return d.Index;})
       .order(d3.ascending);
+
+      dc.renderAll;
+  });
+
+  d3.csv("Cost Saving Method 2 Deep Dive.csv", function (error, data){
+    if (error) throw error;
+
+    var dateFormat = d3.time.format('%d/%m/%Y');
+    var numberFormat1 = d3.format('.2f');
+    var numberFormat = d3.format('.2r');
+
+    data.forEach(function(d) { //for each group within the 'data' array, do the following
+      d["Check in Date"] = dateFormat.parse(d["Check in Date"]);
+      d["Check in Date"].setFullYear(2000 + d["Check in Date"].getFullYear());
+      d["NewShipmentCount"] = +numberFormat(d["NewShipmentCount"]);
+      d.BaseCost = +numberFormat1(d.BaseCost/1000000);
+      d["Updated Base Cost"] = +numberFormat1(d["Updated Base Cost"]/1000000);
+    });
+
+    //Inititae crossfilter instance
+    var matrix = crossfilter(data);
+
+    //dimensions
+    var checkInDateDim = matrix.dimension(function (d) { return d["Check in Date"]; });
+    // var boxDayDim = matrix.dimension(function (d) {
+    //     var day = d["Check in Date"].getDay();
+    //     var name = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    //     return name[day];
+    // });
+    // var boxMonthDim = matrix.dimension(function (d) {
+    //     var month = d["Check in Date"].getMonth();
+    //     var name = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    //     return name[month];
+    // });
+
+    //Metrics
+    var minDate = checkInDateDim.bottom(1)[0]["Check in Date"];
+    var maxDate = checkInDateDim.top(1)[0]["Check in Date"];
+    var initialBasecostGroup = checkInDateDim.group().reduceSum(function(d){return d.BaseCost});
+    var updatedBasecostGroup = checkInDateDim.group().reduceSum(function(d){return d["Updated Base Cost"]});
+
+    costComparisonLineChartM2
+      .width(800)
+      .height(300)
+      .margins({top: 20, right: 0, bottom: 20, left: 50})
+      .dimension(checkInDateDim)
+      .compose([
+      dc.lineChart(costComparisonLineChartM2)
+        .group(initialBasecostGroup, 'Before')
+        .renderArea(true)
+        .ordinalColors(['#699fce']),
+      dc.lineChart(costComparisonLineChartM2)
+      .group(updatedBasecostGroup, 'After')
+      .renderArea(true)
+      .ordinalColors(['#1e384f'])
+      ])
+      .transitionDuration(500)
+      .x(d3.time.scale().domain([minDate, maxDate]))
+      .elasticY(true)
+      .yAxisLabel("Currency Cost / million")
+      .brushOn(false)
+      .legend(dc.legend().x(750).y(10).itemHeight(13).gap(5))
+      .renderHorizontalGridLines(true)
+      .renderVerticalGridLines(true);
 
       dc.renderAll;
   });
