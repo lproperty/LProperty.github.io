@@ -1,4 +1,4 @@
-Index,Route,MoT,Temp,BaseCost,Volume,Check in Date,Weight,OldShipmentCount,netVol,netWeight,New_SH,New_BC,NewShipmentCount,Savings
+Index,Route,Mode of Transport,Temperature Condition,BaseCost,Volume,Check in Date,Weight,Old Shipment Count,netVol,netWeight,New_SH,New_BC,New Shipment Count,Savings
 0,IDA039,Land,Ambient,128753244,211092466.66,2017-03-09,83397.0,6,0.0,0.0,"9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S,9S",967500.0,43.0,"127,785,744"
 1,IDA353,Sea,Ambient,114900000,329861130.5,2017-03-28,139560.0,12,0.0,0.0,"9F,9F,9F,9F,9F,9F",42000.0,6.0,"114,858,000"
 2,IDA231,Land,Ambient,110194268,139977959.83,2017-03-20,41506.0,4,0.0,0.0,"9Q,9Q,9Q,9Q,9Q",5525000.0,5.0,"104,669,268"

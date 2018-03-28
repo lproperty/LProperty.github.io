@@ -76,6 +76,7 @@
 
     data.forEach(function(d) { //for each group within the 'data' array, do the following
       d.Index = +numberFormat(d.Index);
+      d["New Shipment Count"] = +numberFormat(d["New Shipment Count"]);
     });
 
     //Inititae crossfilter instance
@@ -90,11 +91,11 @@
       .columns([
         "Index",
         "Route",
-        "MoT",
-        "Temp",
+        "Mode of Transport",
+        "Temperature Condition",
         "Check in Date",
-        "OldShipmentCount",
-        "NewShipmentCount",
+        "Old Shipment Count",
+        "New Shipment Count",
         "Savings",
       ])
       .sortBy(function (d) {return d.Index;})
