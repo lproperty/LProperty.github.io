@@ -31,6 +31,7 @@
   var CSTable = dc.dataTable(".CSTable");
 
   //Section 4 charts
+  var M2Table = dc.dataTable(".M2Table");
 
   //Section 5 charts
   var visTable = dc.dataTable(".dc-data-table");
@@ -67,6 +68,41 @@
 
       dc.renderAll;
   });
+
+  d3.csv("m2consolidated.csv", function (error, data){
+    if (error) throw error;
+
+    var numberFormat = d3.format('.2r');
+
+    data.forEach(function(d) { //for each group within the 'data' array, do the following
+      d.Index = +numberFormat(d.Index);
+    });
+
+    //Inititae crossfilter instance
+    var matrix = crossfilter(data);
+
+    var savingsIndex = matrix.dimension(function (d) { return d.Index;});
+
+    M2Table
+      .dimension(savingsIndex)
+      .group(function (d) {return "";})
+      .size(200)
+      .columns([
+        "Index",
+        "Route",
+        "MoT",
+        "Temp",
+        "Check in Date",
+        "OldShipmentCount",
+        "NewShipmentCount",
+        "Savings",
+      ])
+      .sortBy(function (d) {return d.Index;})
+      .order(d3.ascending);
+
+      dc.renderAll;
+  });
+
 
 function renderCharts(data){
 
