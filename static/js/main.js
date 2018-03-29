@@ -84,6 +84,10 @@
       d["NewShipmentCount"] = +numberFormat(d["NewShipmentCount"]);
       d.BaseCost = +numberFormat1(d.BaseCost/1000000);
       d["Updated Base Cost"] = +numberFormat1(d["Updated Base Cost"]/1000000);
+      d.OldShipmentCount = +d.OldShipmentCount;
+      d.NewShipmentCount = +d.NewShipmentCount;
+      d.Weight = +d.Weight;
+      d.Volume = +d.Volume;
     });
 
     //Inititae crossfilter instance
@@ -97,8 +101,8 @@
     var maxDate2 = checkInDateDim2.top(1)[0]["Check in Date"];
     var initialBasecostGroup2 = checkInDateDim2.group().reduceSum(function(d){return d.BaseCost});
     var updatedBasecostGroup2 = checkInDateDim2.group().reduceSum(function(d){return d["Updated Base Cost"]});
-    var tonsGroup2 = checkInDateDim2.group().reduceSum(function(d){return d.Weight});
-    var meter3Group2 = checkInDateDim2.group().reduceSum(function(d){return d.Volume});
+    var tonsGroup2 = checkInDateDim2.group().reduceSum(function(d){return d.Weight/1000});
+    var meter3Group2 = checkInDateDim2.group().reduceSum(function(d){return d.Volume/1000000});
     var oldNumTruckGroup2 = checkInDateDim2.group().reduceSum(function(d){return d.OldShipmentCount});
     var newNumTruckGroup2 = checkInDateDim2.group().reduceSum(function(d){return d.NewShipmentCount});
 
@@ -117,10 +121,13 @@
         var formatSF = d3.format(".4s");
 
         var totalTons = formatInteger(sumValue(tonsGroup2.all()));
+        console.log(totalTons);
         var averageCostPerTonBefore = format(sumValue(initialBasecostGroup2.all()) / sumValue(tonsGroup2.all()) );
         var averageCostPerTonAfter = format(sumValue(updatedBasecostGroup2.all()) / sumValue(tonsGroup2.all()) );
+
         var totalBC = formatInteger(sumValue(initialBasecostGroup2.all()));
         var totalNBC = formatInteger(sumValue(updatedBasecostGroup2.all()));
+
         var averageCostPerM3Before = format(sumValue(initialBasecostGroup2.all()) / sumValue(meter3Group2.all()) );
         var averageCostPerM3After = format(sumValue(updatedBasecostGroup2.all()) / sumValue(meter3Group2.all()) );
         var totalTrucksBefore = formatInteger(sumValue(oldNumTruckGroup2.all()));
@@ -157,7 +164,7 @@
     costComparisonLineChartM2
       .width(800)
       .height(300)
-      .margins({top: 20, right: 0, bottom: 20, left: 50})
+      .margins({top: 20, right: 100, bottom: 20, left: 50})
       .dimension(checkInDateDim2)
       .compose([
       dc.lineChart(costComparisonLineChartM2)
@@ -174,7 +181,7 @@
       .elasticY(true)
       .yAxisLabel("Currency Cost / million")
       .brushOn(false)
-      .legend(dc.legend().x(750).y(10).itemHeight(13).gap(5))
+      .legend(dc.legend().x(680).y(10).itemHeight(13).gap(5))
       .renderHorizontalGridLines(true)
       .renderVerticalGridLines(true);
 
@@ -352,7 +359,7 @@ function renderCharts(data){
       }
     );
 
-    var lineMonthTSGroup = boxMonthDim.group().reduce(
+    var lineMonthTSGroup = monthOfYearDim.group().reduce(
       function(p, v){
         ++p.days;
         p.total += v.TS;
@@ -370,7 +377,7 @@ function renderCharts(data){
       }
     );
 
-    var lineMonthTWGroup = boxMonthDim.group().reduce(
+    var lineMonthTWGroup = monthOfYearDim.group().reduce(
       function(p, v){
         ++p.days;
         p.total += v["New TWeight"];
@@ -966,7 +973,7 @@ $( "dateSelect" ).data( dateFormat(maxDate) + dateFormat(minDate) );
       costComparisonLineChart
         .width(800)
         .height(300)
-        .margins({top: 20, right: 0, bottom: 20, left: 50})
+        .margins({top: 20, right: 100, bottom: 20, left: 50})
         .dimension(checkInDateDim)
         .compose([
         dc.lineChart(costComparisonLineChart)
@@ -983,15 +990,15 @@ $( "dateSelect" ).data( dateFormat(maxDate) + dateFormat(minDate) );
         .elasticY(true)
         .yAxisLabel("Currency Cost / million")
         .brushOn(false)
-        .legend(dc.legend().x(750).y(10).itemHeight(13).gap(5))
+        .legend(dc.legend().x(680).y(10).itemHeight(13).gap(5))
         .renderHorizontalGridLines(true)
         .renderVerticalGridLines(true);
 
       dayOfWeekTCChart
         .width(550)
         .height(300)
-        .margins({top: 40, right: 40, bottom: 20, left: 30})
-        .dimension(boxDayDim)
+        .margins({top: 40, right: 80, bottom: 20, left: 30})
+        .dimension(dayOfWeekDim)
         .x(d3.scale.ordinal().domain(['1.Mon', '2.Tue', '3.Wed', '4.Thu', '5.Fri', '6.Sat','7.Sun']))
         .xUnits(dc.units.ordinal)
         ._rangeBandPadding(1) //Super important!!!
@@ -1015,20 +1022,16 @@ $( "dateSelect" ).data( dateFormat(maxDate) + dateFormat(minDate) );
         .elasticY(true)
         .yAxisLabel("Truck Size (t)")
         .brushOn(false)
-        .legend(dc.legend().x(500).y(10).itemHeight(13).gap(5))
+        .legend(dc.legend().x(480).y(10).itemHeight(13).gap(5))
         .renderHorizontalGridLines(true)
         .renderVerticalGridLines(true);
 
         monthOfYearTCChart
           .width(800)
           .height(300)
-          .margins({top: 20, right: 0, bottom: 20, left: 50})
+          .margins({top: 20, right: 80, bottom: 20, left: 50})
           .dimension(boxMonthDim)
-          .x(d3.scale.ordinal().domain(boxMonthDim.top(Infinity).map(function (d) {
-              var month = d["Check in Date"].getMonth();
-              var name = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-              return name[month];
-          })))
+          .x(d3.scale.ordinal().domain(['1.Jan', '2.Feb', '3.Mar', '4.Apr', '5.May', '6.Jun', '7.Jul', '8.Aug', '9.Sep', '10.Oct', '11.Nov', '12.Dec']))
           .xUnits(dc.units.ordinal)
           ._rangeBandPadding(1) //Super important!!!
           .compose([
@@ -1051,7 +1054,7 @@ $( "dateSelect" ).data( dateFormat(maxDate) + dateFormat(minDate) );
           .elasticY(true)
           .yAxisLabel("Truck Size (t)")
           .brushOn(false)
-          .legend(dc.legend().x(750).y(10).itemHeight(13).gap(5))
+          .legend(dc.legend().x(680).y(10).itemHeight(13).gap(5))
           .renderHorizontalGridLines(true)
           .renderVerticalGridLines(true);
 
