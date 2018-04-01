@@ -121,7 +121,6 @@
         var formatSF = d3.format(".4s");
 
         var totalTons = formatInteger(sumValue(tonsGroup2.all()));
-        console.log(totalTons);
         var averageCostPerTonBefore = format(sumValue(initialBasecostGroup2.all()) / sumValue(tonsGroup2.all()) );
         var averageCostPerTonAfter = format(sumValue(updatedBasecostGroup2.all()) / sumValue(tonsGroup2.all()) );
 
@@ -224,8 +223,8 @@
   });
 
 
-function renderCharts(data){
-
+d3.csv("Cost Saving Method 1 Deep Dive.csv", function (error, data){
+    if (error) throw error;
     //Data manipulation: so that data is in a form that d3.js can take
     var dateFormat = d3.time.format('%d/%m/%Y');
     var numberFormat = d3.format('.2f');
@@ -1205,7 +1204,7 @@ $( "dateSelect" ).data( dateFormat(maxDate) + dateFormat(minDate) );
       ]);
 
     dc.renderAll();
-};
+});
 
 //--------------------------------------------------------------------
 function sumValue(d) {
@@ -1214,26 +1213,4 @@ function sumValue(d) {
     value +=p.value;
   });
   return value;
-};
-//local csv and renders all charts
-function load_dataset(csv) {
-  var data = d3.csv.parse(csv);
-  renderCharts(data);
-}
-// handle upload button
-function upload_button(el, callback) {
-  var uploader = document.getElementById(el);
-  var reader = new FileReader();
-
-  reader.onload = function(e) {
-    var contents = e.target.result;
-    callback(contents);
-  };
-
-  uploader.addEventListener("change", handleFiles, false);
-
-  function handleFiles() {
-    var file = this.files[0];
-    reader.readAsText(file);
-  };
 };
