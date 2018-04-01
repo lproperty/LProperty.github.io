@@ -44,7 +44,7 @@
     var numberFormat = d3.format('.2r');
 
     data.forEach(function(d) { //for each group within the 'data' array, do the following
-      d.Index = +numberFormat(d.Index);
+      d.Index = +d.Index;
     });
 
     //Inititae crossfilter instance
@@ -63,7 +63,7 @@
         "New Truck Type Description",
         "New Truck Type",
         "Count",
-        "Savings",
+        "Savings"
       ])
       .sortBy(function (d) {return d.Index;})
       .order(d3.ascending);
@@ -193,7 +193,7 @@
     var numberFormat = d3.format('.2r');
 
     data.forEach(function(d) { //for each group within the 'data' array, do the following
-      d.Index = +numberFormat(d.Index);
+      d.Index = +d.Index;
       d["New Shipment Count"] = +numberFormat(d["New Shipment Count"]);
     });
 
@@ -201,7 +201,6 @@
     var matrix = crossfilter(data);
 
     var savingsIndex = matrix.dimension(function (d) { return d.Index;});
-
     M2Table
       .dimension(savingsIndex)
       .group(function (d) {return "";})
