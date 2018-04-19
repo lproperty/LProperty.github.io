@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- This is suppose to ensure proper rendering and touch zooming on Mobile devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=0.53">
+  <title>Logistics Dashboard</title>
+  <link rel="stylesheet" href="./static/lib/css//bootstrap.min.css">
+  <link rel="stylesheet" href="./static/lib/css/dc.css">
+  <link rel="stylesheet" href="./static/css/custom.css">
+
+</head>
+<body class="application">
+
+  <div class="se-pre-con"></div>
+
+  <div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="">DASHBOARD</a>
+    </div>
+  </div>
+  </div>
+
+  <!-- Nav tabs -->
+<div class="row">
+  <div class="col-md-8">
+    <ul class="nav nav-pills" role="tablist">
+      <li class="active"><a href="#section1" role="tab" data-toggle="tab">Criteria Selection</a></li>
+      <li><a href="#section2" role="tab" data-toggle="tab">Charts & Graphs</a></li>
+      <li><a href="#section3" role="tab" data-toggle="tab">Truck Downsizing</a></li>
+      <li><a href="#section4" role="tab" data-toggle="tab">Truck Consolidation</a></li>
+      <li><a href="#section5" role="tab" data-toggle="tab">Data Table</a></li>
+    </ul>
+  </div>
+  <div class="dc-data-count col-md-4">
+      <p id="dateRange"></p>
+      <div class="dataSelected">
+        <span class="filter-count"></span> selected out of <span class="total-count"></span> records | <a
+              href="javascript:dc.filterAll(); dc.renderAll();">Reset All</a>
+      </div>
+  </div>
+</div>
+
+
+<!-- Tab panes -->
+<div class="tab-content">
+
+<div class="tab-pane fade in active" id="section1">
+<div class="container-fluid">
+  <div class="filler"></div>
+  <div class="alert alert-warning fade in" role="alert">
+    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+    <h4>Welcome to the logistics dashboard!</h4>
+    <p>
+        Please click on the charts to select your data range.
+        If charts did not load, please review the raw csv file to ensure it follows the naming requirements.
+    </p>
+</div>
+
+    <div class="row">
+      <!--Contains block elements in the first row-->
+      <div class="col-md-3">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Month-of-year Profile
+          </div>
+          <div class="chart-stage">
+            <div id="monthOfYearChart">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:monthOfYearChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <!-- <div class="chart-notes">
+            Notes about this chart
+          </div> -->
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Day-of-Week Profile
+          </div>
+          <div class="chart-stage">
+            <div id="dayOfWeekProfile">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:dayOfWeekChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <!-- <div class="chart-notes">
+            Notes about this chart
+          </div> -->
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Shipments Overview
+          </div>
+          <div class="chart-stage">
+            <div id="timeChart">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:timeChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="chart-notes">
+            Drag to select time duration
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <!--Contains block elements in the second row-->
+      <div class="col-md-3">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Transport Scope
+          </div>
+          <div class="chart-stage">
+            <div id="transportScope">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:transportScopeChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <!-- <div class="chart-notes">
+            Primary Inbound, Primary Outbound, Secondary Outbound, Other
+          </div> -->
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+              Mode of Transport
+          </div>
+          <div class="chart-stage">
+            <div id="mot">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:motChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <!-- <div class="chart-notes">
+            Notes about this chart
+          </div> -->
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Temperature Condition
+          </div>
+          <div class="chart-stage">
+            <div id="tempCondition">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:tempConditionChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <!-- <div class="chart-notes">
+            Notes about this chart
+          </div> -->
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Quarter Profile
+          </div>
+          <div class="chart-stage">
+            <div id="quarterProfile">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:quarterChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <!--Contains block elements in the first row-->
+      <!-- <div class="col-md-3">
+        <div class="chart-wrapper"></div>
+      </div> -->
+
+      <div class="col-md-12">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Summary Statistics
+          </div>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Criterion Set</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Total Cases Transported</th>
+                <td id="TotalCases"></td>
+              </tr>
+              <tr>
+                <th scope="row">Average Cost per Case Transported (Mil)</th>
+                <td id="AvergeCostPerCase"></td>
+              </tr>
+              <tr>
+                <th scope="row">Total Tonnage Transported</th>
+                <td id="TotalTons"></td>
+              </tr>
+              <tr>
+                <th scope="row">Average Cost per Ton Transported (Mil)</th>
+                <td id="AvergeCostPerTon"></td>
+              </tr>
+              <tr>
+                <th scope="row">Total Metre³ Transported</th>
+                <td id="TotalMeter3"></td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- <div class="chart-notes">
+            Notes about this chart
+          </div> -->
+        </div>
+      </div>
+      <!-- <div class="col-md-3">
+        <div class="chart-wrapper"></div>
+      </div> -->
+    </div>
+
+  </div>
+</div>
+
+<div class="tab-pane fade" id="section2">
+<div class="container-fluid">
+  <div class="filler"></div>
+    <!-- 1st row -->
+    <div class="row">
+      <div class="col-md-4">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Day-of-Week Shipments Profile
+          </div>
+          <div class="chart-stage">
+            <div id="boxDayNoChart">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:boxDayNoChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="chart-notes">
+            <!--• Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4-->
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Month-of-year Shipments Profile
+          </div>
+          <div class="chart-stage">
+            <div id="boxMonthNoChart">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:boxMonthNoChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="chart-notes">
+            <!--• Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4-->
+          </div>
+        </div>
+    </div>
+    </div>
+
+
+<!-- 2nd row -->
+  <div class="row">
+    <div class="col-md-4">
+      <div class="chart-wrapper">
+        <div class="chart-title">
+          Day-of-Week Weight Profile
+        </div>
+        <div class="chart-stage">
+          <div id="boxDayWeightChart">
+            <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+            <a class="reset" href="javascript:boxDayWeightChart.filterAll();dc.redrawAll();"
+               style="display: none;">reset</a>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <div class="chart-notes">
+          <!--• Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4-->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="chart-wrapper">
+        <div class="chart-title">
+          Month-of-year Weight Profile
+        </div>
+        <div class="chart-stage">
+          <div id="boxMonthWeightChart">
+            <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+            <a class="reset" href="javascript:boxMonthWeightChart.filterAll();dc.redrawAll();"
+               style="display: none;">reset</a>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <div class="chart-notes">
+          <!--• Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4-->
+        </div>
+      </div>
+  </div>
+  </div>
+
+<!-- 3rd row -->
+  <div class="row">
+    <div class="col-md-4">
+      <div class="chart-wrapper">
+        <div class="chart-title">
+          Day-of-Week Volume Profile
+        </div>
+        <div class="chart-stage">
+          <div id="boxDayVolumeChart">
+            <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+            <a class="reset" href="javascript:boxDayVolumeChart.filterAll();dc.redrawAll();"
+               style="display: none;">reset</a>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <div class="chart-notes">
+        <!--• Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4-->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="chart-wrapper">
+        <div class="chart-title">
+          Month-of-year Volume Profile
+        </div>
+        <div class="chart-stage">
+          <div id="boxMonthVolumeChart">
+            <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+            <a class="reset" href="javascript:boxMonthVolumeChart.filterAll();dc.redrawAll();"
+               style="display: none;">reset</a>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <div class="chart-notes">
+        <!--• Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4-->
+        </div>
+      </div>
+  </div>
+  </div>
+
+  <!-- 4th row -->
+    <div class="row">
+      <div class="col-md-4">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Day-of-Week Load Fill Profile
+          </div>
+          <div class="chart-stage">
+            <div id="boxDayLFChart">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:boxDayLFChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="chart-notes">
+            <!--• Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4-->
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Month-of-year Load Fill Profile
+          </div>
+          <div class="chart-stage">
+            <div id="boxMonthLFChart">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:boxMonthLFChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="chart-notes">
+            <!--• Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4-->
+          </div>
+        </div>
+    </div>
+    </div>
+
+  <!-- 5th row -->
+    <div class="row">
+      <div class="col-md-4">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Day-of-Week Truck Size Profile
+          </div>
+          <div class="chart-stage">
+            <div id="boxDayTSChart">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:boxDayTSChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="chart-notes">
+            <!--• Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4-->
+        </div>
+      </div>
+      </div>
+      <div class="col-md-8">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Month-of-year Truck Size Profile
+          </div>
+          <div class="chart-stage">
+            <div id="boxMonthTSChart">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:boxMonthTSChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="chart-notes">
+            <!--• Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4-->
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="tab-pane fade" id="section3">
+<div class="container-fluid">
+  <div class="filler"></div>
+    <!-- 1st row -->
+    <div class="row">
+      <div class="col-md-5">
+        <div class="chart-wrapper">
+              <div class="chart-title">
+                Summary Statistics
+              </div>
+              <table class="table table-hover" height="300">
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Before</th>
+                    <th scope="col">After</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">Total Logistical Costs (Mil)</th>
+                    <td id="totalBC"></td>
+                    <td id="totalNBC"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Average Cost per Case Transported (Mil)</th>
+                    <td id="AvergeCostPerCaseBefore"></td>
+                    <td id="AverageCostPerCaseAfter"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Average Cost per Tonnage Transported (Mil)</th>
+                    <td id="AvergeCostPerTonBefore"></td>
+                    <td id="AvergeCostPerTonAfter"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Average Cost per Volume Transported (Mil)</th>
+                    <td id="AvergeCostPerM3Before"></td>
+                    <td id="AvergeCostPerM3After"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Average Truck Volume Capacity (M³)</th>
+                    <td id="AvergeTonCapBefore"></td>
+                    <td id="AvergeTonCapAfter"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Average Truck Weight Capacity (Ton)</th>
+                    <td id="AvergeVolCapBefore"></td>
+                    <td id="AvergeVolCapAfter"></td>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- <div class="chart-notes">
+                Notes about this chart
+              </div> -->
+          </div>
+        </div>
+
+      <div class="col-md-7">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Cost Comparison Profiles
+          </div>
+          <div class="chart-stage">
+            <div id="costComparisonLineChart">
+              <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+              <a class="reset" href="javascript:boxMonthTSChart.filterAll();dc.redrawAll();"
+                 style="display: none;">reset</a>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="chart-notes">
+            <!--• Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4-->
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- 2nd row -->
+  <div class="row">
+
+    <div class="col-md-5">
+      <div class="chart-wrapper">
+        <div class="chart-title">
+          Day-of-Week Truck Capacity Profile
+        </div>
+        <div class="chart-stage">
+          <div id="dayOfWeekTCChart">
+            <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+            <a class="reset" href="javascript:boxDayTSChart.filterAll();dc.redrawAll();"
+               style="display: none;">reset</a>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <div class="chart-notes">
+          <!--• Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4-->
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-7">
+      <div class="chart-wrapper">
+        <div class="chart-title">
+          Month-of-Year Truck Capacity Profile
+        </div>
+        <div class="chart-stage">
+          <div id="monthOfYearTCChart">
+            <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+            <a class="reset" href="javascript:boxMonthTSChart.filterAll();dc.redrawAll();"
+               style="display: none;">reset</a>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <div class="chart-notes">
+          <!--• Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4-->
+        </div>
+      </div>
+    </div>
+
+</div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="chart-wrapper">
+        <div class="chart-title">
+          Consolidated Savings by Truck Downsizing
+        </div>
+        <div class="chart-stage">
+          <table class="table table-hover CSTable"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+  <div class="tab-pane fade" id="section4">
+    <div class="container-fluid">
+      <div class="filler"></div>
+      <!-- 1st row -->
+      <div class="row">
+        <div class="col-md-5">
+          <div class="chart-wrapper">
+                <div class="chart-title">
+                  Summary Statistics
+                </div>
+                <table class="table table-hover" height="300">
+                  <thead>
+                    <tr>
+                      <th scope="col"></th>
+                      <th scope="col">Before</th>
+                      <th scope="col">After</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">Total Logistical Costs (Mil)</th>
+                      <td id="totalBC2"></td>
+                      <td id="totalNBC2"></td>
+                    </tr>
+                      <tr>
+                      <th scope="row">Average Cost per Tonnage Transported (Mil)</th>
+                      <td id="AverageCostPerTonBefore2"></td>
+                      <td id="AverageCostPerTonAfter2"></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Average Cost per Volume Transported (Mil)</th>
+                      <td id="AverageCostPerM3Before2"></td>
+                      <td id="AverageCostPerM3After2"></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Number of Trucks Used</th>
+                      <td id="numTrucksBefore"></td>
+                      <td id="numTrucksAfter"></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <!-- <div class="chart-notes">
+                  Notes about this chart
+                </div> -->
+            </div>
+          </div>
+
+        <div class="col-md-7">
+          <div class="chart-wrapper">
+            <div class="chart-title">
+              Cost Comparison Profiles
+            </div>
+            <div class="chart-stage">
+              <div id="costComparisonLineChartM2">
+                <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+                <a class="reset" href="javascript:boxMonthTSChart.filterAll();dc.redrawAll();"
+                   style="display: none;">reset</a>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+            <div class="chart-notes">
+              <!--• Mean=29.2 &nbsp&nbsp&nbsp • Variance=4.2 &nbsp&nbsp&nbsp • CV=3.4-->
+            </div>
+          </div>
+      </div>
+    </div>
+    <!--second row-->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="chart-wrapper">
+            <div class="chart-title">
+              Consolidated Savings by Truck Consolidation
+            </div>
+            <div class="chart-stage">
+              <table class="table table-hover M2Table"></table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-pane fade" id="section5">
+  <div class="container-fluid">
+    <div class="filler"></div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Data Table
+          </div>
+          <div class="chart-stage">
+            <table class="table table-hover dc-data-table">
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <p class="small text-muted">NUS | Industrial and Systems Engineering</p>
+</div>
+
+<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+<script src="./static/lib/js/jquery.min.js"></script>
+<script src="./static/lib/js/bootstrap.min.js"></script>
+<script src="./static/lib/js/crossfilter.js"></script>
+<script src="./static/lib/js/d3.js"></script>
+<script src="./static/lib/js/dc.js"></script>
+<script src="./static/lib/js/queue.js"></script>
+
+<script src="./static/js/main.js"></script>
+<script src="./static/js/pre-loader.js"></script>
+<script src="./static/lib/js/modernizr.js"></script>
+
+<script>if (window.module) module = window.module;</script>
+
+</body>
+</html>
